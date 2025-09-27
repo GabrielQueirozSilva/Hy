@@ -8,7 +8,8 @@ import json
 import keyboard
 import os 
 import re
-from thefuzz import process
+from thefuzz import fuzz, process
+
 
 # ... (Suas listas de palavras-chave continuam iguais) ...
 TIERS = ["legendary", "epic", "rare", "common", "uncommon", "mythic", "special", "divine", "very special"]
@@ -20,7 +21,7 @@ PET_TYPES = ["elephant", "blue whale", "enderman", "silverfish","Armadillo","end
              "wolf", "bee", "chicken", "hedgehog", "pig", "slug", "girafe", "lion", "ocelot", "ammonite", "baby yeti", "dolphin", "flying fish",
              "megalodon", "penguin", "spinosarus", "hermit crab", "jellyfish", "parrot", "owl", "bingo", "montezuma", "wisp"]
 PRICE_KEYWORDS = ["buy it now:", "now:", "it now:", "coins", "coims", "coms", "by it now:"]
-COSMETIC_KEYWORDS = ["pet skins", "change the look", "skin can be active", "this skin"]
+COSMETIC_KEYWORDS = ["skin", "pet skins", "change the look", "skin can be active", "this skin"]
 
 
 class HypixelItemAnalyzer:
@@ -86,7 +87,32 @@ class HypixelItemAnalyzer:
         if lines:
             item_data['name'] = lines[0].strip()
 
-        for line in lines[1:]:
+        # --- ESTRATÉGIA DE CLASSIFICAÇÃO ATUALIZADA ---
+
+        # 1. TENTATIVA DE CLASSIFICAR COMO PET PELO NOME (ALTA PRIORIDADE)
+        # Limpamos o nome para a comparação
+        nome_limpo = item_data['name'].lower()
+        LIMITE_DE_CONFIANCA_PET = 88 # Um pouco mais alto para evitar falsos positivos
+
+        # Iteramos na nossa lista de pets para encontrar a melhor correspondência parcial
+        melhor_pontuacao_pet = 0
+        melhor_match_pet = None
+        
+        for pet_type in PET_TYPES:
+            pontuacao = fuzz.partial_ratio(pet_type, nome_limpo)
+            if pontuacao > melhor_pontuacao_pet:
+                melhor_pontuacao_pet = pontuacao
+                melhor_match_pet = pet_type
+
+        # Se a melhor correspondência for boa o suficiente, classificamos e paramos.
+        if melhor_pontuacao_pet >= LIMITE_DE_CONFIANCA_PET:
+            item_data['class'] = "Pet"
+            item_data['pet_type'] = melhor_match_pet
+            # Como já classificamos, podemos continuar o loop apenas para pegar
+            # preço, vendedor, etc., mas não vamos mais procurar a classe.
+        
+        # 2. LOOP PARA PEGAR OS OUTROS DADOS (PREÇO, VENDEDOR, TIER, ETC.)
+        for line in lines[1:]: # Começa da segunda linha
             line_clean = line.strip().lower()
             if not line_clean:
                 continue
@@ -118,17 +144,14 @@ class HypixelItemAnalyzer:
                         item_data['item_tier'] = tier
                         break
 
+            # 3. TENTATIVA DE CLASSIFICAR (SE AINDA NÃO FOI FEITO)
+            # Este bloco só será executado se o item NÃO for um pet.
             elif 'class' not in item_data:
+                # Usamos um 'in' simples aqui. Fuzzy é exagero para uma string tão fixa.
                 if "gear score:" in line_clean:
                     item_data['class'] = "Item"
                 elif any(keyword in line_clean for keyword in COSMETIC_KEYWORDS):
                     item_data['class'] = "Cosmetic"
-                else:
-                    melhor_match, pontuacao = process.extractOne(line_clean, PET_TYPES)
-                    LIMITE_DE_CONFIANCA = 85
-                    if pontuacao >= LIMITE_DE_CONFIANCA:
-                        item_data['class'] = "Pet"
-                        item_data['pet_type'] = melhor_match
                         
                         
         return item_data
