@@ -10,8 +10,7 @@ import os
 import re
 from thefuzz import fuzz, process
 
-
-# ... (Suas listas de palavras-chave continuam iguais) ...
+LIMITE_DE_CONFIANCA_PET = 88 
 TIERS = ["legendary", "epic", "rare", "common", "uncommon", "mythic", "special", "divine", "very special"]
 PET_TYPES = ["elephant", "blue whale", "enderman", "silverfish","Armadillo","endermite","glacite golem", "scatcha", "bal", "bat", "mole"
              "mithril golem", "rat", "rabbit", "tiger", "grandma wolf", "snail", "wither skeleton", "goblin", "Ankylosaurus", "black cat" 
@@ -22,11 +21,10 @@ PET_TYPES = ["elephant", "blue whale", "enderman", "silverfish","Armadillo","end
              "megalodon", "penguin", "spinosarus", "hermit crab", "jellyfish", "parrot", "owl", "bingo", "montezuma", "wisp"]
 PRICE_KEYWORDS = ["buy it now:", "now:", "it now:", "coins", "coims", "coms", "by it now:"]
 COSMETIC_KEYWORDS = ["skin", "pet skins", "change the look", "skin can be active", "this skin"]
-
+DUNGEDON = ["score:", "gear", "gear score:"]
 
 class HypixelItemAnalyzer:
     def __init__(self, yolo_model_path, conf_threshold=0.9):
-        # ... (o resto do __init__ continua igual) ...
         self.model = YOLO(yolo_model_path)
         self.conf_threshold = conf_threshold
         self.running = True
@@ -39,7 +37,6 @@ class HypixelItemAnalyzer:
         self.output_folder = "detections"
         os.makedirs(self.output_folder, exist_ok=True)
     
-    # --- NOVA FUNÇÃO AUXILIAR PARA CORRIGIR QUEBRAS DE LINHA ---
     def reconstruir_texto_por_posicao(self, ocr_results, y_tolerance=5):
         """
         Agrupa os resultados do EasyOCR em linhas baseadas na sua posição vertical (Y).
@@ -47,71 +44,84 @@ class HypixelItemAnalyzer:
         if not ocr_results:
             return ""
 
-        # Ordena os resultados pela coordenada Y (de cima para baixo)
         ocr_results.sort(key=lambda res: res[0][0][1])
 
         lines = []
         current_line = []
-        # Pega a posição Y da primeira caixa de texto como referência
         last_y = ocr_results[0][0][0][1]
 
         for res in ocr_results:
             bbox, text, prob = res
             current_y = bbox[0][1]
 
-            # Se a diferença de altura for pequena, considera na mesma linha
             if abs(current_y - last_y) < y_tolerance:
                 current_line.append(res)
             else:
-                # Se a linha mudou, ordena a linha anterior por X e a salva
                 if current_line:
                     current_line.sort(key=lambda r: r[0][0][0]) # Ordena por X (esquerda para direita)
                     lines.append(" ".join([r[1] for r in current_line]))
                 
-                # Começa uma nova linha
                 current_line = [res]
                 last_y = current_y
         
-        # Não esquece de adicionar a última linha
         if current_line:
             current_line.sort(key=lambda r: r[0][0][0])
             lines.append(" ".join([r[1] for r in current_line]))
 
         return "\n".join(lines)
     
-    # ... (A função parse_item_data continua exatamente a mesma) ...
     def parse_item_data(self, text):
         item_data = {}
         lines = text.splitlines()
 
         if lines:
             item_data['name'] = lines[0].strip()
+            
+        if len(lines) >= 5: 
+            # Pega a quinta última linha para o TIER
+            quinta_ultima_linha = lines[-5].strip().lower()
+            for tier in TIERS:
+                if tier in quinta_ultima_linha:
+                    item_data['item_tier'] = tier
+                    break
+                
+            # Pega a quarta última linha para o SELLER   
+            quarta_ultima_linha = lines[-4].strip()
+            partes = quarta_ultima_linha.split(maxsplit=1)
+            if len(partes) == 2:
+                chave,valor = partes[0], partes[1]  
+                chave_normalizada = chave.lower().replace('-', ':')
+                if fuzz.ratio(chave_normalizada, "seller:") >= 80:
+                    item_data['seller'] = valor.strip()
+            
+            # Pega a terceira última linha para o PRICE    
+            terceira_ultima_linha = lines[-3].strip().lower()
+            try:
+                parte_do_preco = terceira_ultima_linha.split(':', 1)[1]
+                price_str = re.sub(r'[^\d]', '', parte_do_preco)
+                if price_str:
+                    item_data['price'] = int(price_str)
+            except (IndexError, ValueError):
+                item_data['price'] = None      
 
-        # --- ESTRATÉGIA DE CLASSIFICAÇÃO ATUALIZADA ---
 
         # 1. TENTATIVA DE CLASSIFICAR COMO PET PELO NOME (ALTA PRIORIDADE)
-        # Limpamos o nome para a comparação
+  
         nome_limpo = item_data['name'].lower()
-        LIMITE_DE_CONFIANCA_PET = 88 # Um pouco mais alto para evitar falsos positivos
-
-        # Iteramos na nossa lista de pets para encontrar a melhor correspondência parcial
         melhor_pontuacao_pet = 0
         melhor_match_pet = None
-        
+            
         for pet_type in PET_TYPES:
             pontuacao = fuzz.partial_ratio(pet_type, nome_limpo)
             if pontuacao > melhor_pontuacao_pet:
                 melhor_pontuacao_pet = pontuacao
                 melhor_match_pet = pet_type
 
-        # Se a melhor correspondência for boa o suficiente, classificamos e paramos.
         if melhor_pontuacao_pet >= LIMITE_DE_CONFIANCA_PET:
             item_data['class'] = "Pet"
             item_data['pet_type'] = melhor_match_pet
-            # Como já classificamos, podemos continuar o loop apenas para pegar
-            # preço, vendedor, etc., mas não vamos mais procurar a classe.
         
-        # 2. LOOP PARA PEGAR OS OUTROS DADOS (PREÇO, VENDEDOR, TIER, ETC.)
+        #FUNÇÃO DE BACKUP(CASO NÃO TENHA ENCONTRADO VALORES AINDA)
         for line in lines[1:]: # Começa da segunda linha
             line_clean = line.strip().lower()
             if not line_clean:
@@ -121,55 +131,30 @@ class HypixelItemAnalyzer:
                 try:
                     parte_do_preco = line.split(':', 1)[1]
                     price_str = re.sub(r'[^\d]', '', parte_do_preco)
-
                     if price_str:
-                        if len(price_str) > 6:
-                           price_str = price_str.replace('8', '0')
                         item_data['price'] = int(price_str)
-                    else:
-                        item_data['price'] = None
                 except (IndexError, ValueError):
-                    item_data['price'] = None
-
-            elif 'seller:' in line_clean:
-                try:
-                    seller_name = line.split(':', 1)[1].strip()
-                    item_data['seller'] = seller_name
-                except IndexError:
                     pass
 
-            elif 'item_tier' not in item_data and any(tier in line_clean for tier in TIERS):
-                for tier in TIERS:
-                    if tier in line_clean:
-                        item_data['item_tier'] = tier
-                        break
-
-            # 3. TENTATIVA DE CLASSIFICAR (SE AINDA NÃO FOI FEITO)
-            # Este bloco só será executado se o item NÃO for um pet.
-            elif 'class' not in item_data:
-                # Usamos um 'in' simples aqui. Fuzzy é exagero para uma string tão fixa.
-                if "gear score:" in line_clean:
+            if 'class' not in item_data: 
+                if any(keyword in line_clean for keyword in DUNGEDON):
                     item_data['class'] = "Item"
                 elif any(keyword in line_clean for keyword in COSMETIC_KEYWORDS):
                     item_data['class'] = "Cosmetic"
-                        
+                                    
                         
         return item_data
 
-    # --- ALTERAÇÃO NA extract_roi_text PARA USAR A NOVA FUNÇÃO ---
     def extract_roi_text(self, image, bbox):
         x1, y1, x2, y2 = bbox
         roi = image[y1:y2, x1:x2]
         
-        # 1. Roda o EasyOCR normalmente
         results = self.reader.readtext(roi)
         
-        # 2. Usa a nova função para juntar o texto de forma inteligente
         full_text = self.reconstruir_texto_por_posicao(results)
         
         return full_text.strip()
         
-    # ... (O resto do seu código, de request_save até o final, continua igual) ...
     def request_save(self):
         print("[AÇÃO] Tecla 'v' pressionada. Salvamento solicitado...")
         self.save_requested = True
@@ -241,7 +226,6 @@ class HypixelItemAnalyzer:
 
     def display_analysis_overlay(self, frame, analysis):
         if not analysis: return
-        # Adicionado .get('item_data', {}) para evitar erro se a chave não existir
         det = max(analysis, key=lambda x: x['confidence'])
         item_data = det.get('item_data', {})
         y_offset = 50
