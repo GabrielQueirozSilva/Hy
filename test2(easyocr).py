@@ -127,12 +127,12 @@ class HypixelItemAnalyzer:
             item_data['class'] = "Pet"
             item_data['pet_type'] = melhor_match_pet
         
-        # 2°-TENTATIVA. CLASSIFICAR COMO DYE PELO NOME (ALTA PRIORIDADE)
+        # 2°-TENTATIVA. CLASSIFICAR COMO DYE PELO NOME 
 
         if fuzz.partial_ratio("dye", nome_limpo) >= 90:
             item_data['class'] = "Dye" 
         
-        # 3°-TENTATIVA. CLASSIFICAR COMO RUNE PELO NOME (ALTA PRIORIDADE)
+        # 3°-TENTATIVA. CLASSIFICAR COMO RUNE PELO NOME 
 
         if fuzz.partial_ratio("rune", nome_limpo) >= 90:
             item_data['class'] = "Rune"
@@ -143,7 +143,7 @@ class HypixelItemAnalyzer:
             if not line_clean:
                 continue
 
-            if 'price' not in item_data and any(keyword in line_clean for keyword in PRICE_KEYWORDS):
+            if ('price' not in item_data or item_data.get('price') is None) and any(keyword in line_clean for keyword in PRICE_KEYWORDS):
                 try:
                     parte_do_preco = line.split(':', 1)[1]
                     price_str = re.sub(r'[^\d]', '', parte_do_preco)
