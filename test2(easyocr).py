@@ -10,7 +10,11 @@ import os
 import re
 from thefuzz import fuzz, process
 
+
+LIMITE_DE_CONFIANCA_GERAL = 90
 LIMITE_DE_CONFIANCA_PET = 88 
+CONSUMABLE_TITLE = ["power scroll", "potion", "voodo doll", "bottle of jyrre", "grizzly salmon"]
+CONSUMABLES = ["consumable", "consumables", "consumed", "consume" "click to read!"]
 TIERS = ["legendary", "epic", "rare", "common", "uncommon", "mythic", "special", "divine", "very special"]
 PET_TYPES = ["elephant", "blue whale", "enderman", "silverfish","Armadillo","endermite","glacite golem", "scatcha", "bal", "bat", "mole"
              "mithril golem", "rat", "rabbit", "tiger", "grandma wolf", "snail", "wither skeleton", "goblin", "Ankylosaurus", "black cat" 
@@ -22,6 +26,8 @@ PET_TYPES = ["elephant", "blue whale", "enderman", "silverfish","Armadillo","end
 PRICE_KEYWORDS = ["buy it now:", "now:", "it now:", "coins", "coims", "coms", "by it now:"]
 COSMETIC_KEYWORDS = ["skin", "pet skins", "change the look", "skin can be active", "this skin"]
 DUNGEDON = ["score:", "gear", "gear score:", "Oear Scone:" "Oean Scone:"]
+ACESSORY = ["accessory", "acessory", "accessort", "accessont",]
+
 
 class HypixelItemAnalyzer:
     def __init__(self, yolo_model_path, conf_threshold=0.9):
@@ -89,7 +95,19 @@ class HypixelItemAnalyzer:
                 if pontuacao > melhor_pontuacao_tier:
                     melhor_pontuacao_tier = pontuacao
                     melhor_match_tier = tier
-                item_data['item_tier'] = melhor_match_tier 
+                item_data['item_tier'] = melhor_match_tier
+                
+            if item_data['item_tier'] == "special" or item_data['item_tier'] == "very special":
+                item_data['item_class'] = "special_item"
+                    
+                if fuzz.partial_ratio("pet item",quinta_ultima_linha) >= LIMITE_DE_CONFIANCA_GERAL:
+                    item_data['class'] = "Consumables"
+                
+            # Verifica se é ACESSORY   
+            for acessory_keyword in ACESSORY:
+                if fuzz.partial_ratio(acessory_keyword, quinta_ultima_linha) >= LIMITE_DE_CONFIANCA_GERAL:
+                    item_data['class'] = "Accessory"
+                    break 
                 
             # Pega a quarta última linha para o SELLER   
             quarta_ultima_linha = lines[-4].strip()
@@ -97,7 +115,7 @@ class HypixelItemAnalyzer:
             if len(partes) == 2:
                 chave,valor = partes[0], partes[1]  
                 chave_normalizada = chave.lower().replace('-', ':')
-                if fuzz.ratio(chave_normalizada, "seller:") >= 80:
+                if fuzz.ratio(chave_normalizada, "seller:") >= 70:
                     item_data['seller'] = valor.strip()
             
             # Pega a terceira última linha para o PRICE    
@@ -110,32 +128,37 @@ class HypixelItemAnalyzer:
             except (IndexError, ValueError):
                 item_data['price'] = None      
 
+        if 'class' not in item_data:
+                
+            nome_limpo = item_data['name'].lower()
+            melhor_pontuacao_pet = 0
+            melhor_match_pet = None
+                
+            for pet_type in PET_TYPES:
+                pontuacao = fuzz.partial_ratio(pet_type, nome_limpo)
+                if pontuacao > melhor_pontuacao_pet:
+                    melhor_pontuacao_pet = pontuacao
+                    melhor_match_pet = pet_type
 
-        # 1°-TENTATIVA. CLASSIFICAR COMO PET PELO NOME (ALTA PRIORIDADE)
-  
-        nome_limpo = item_data['name'].lower()
-        melhor_pontuacao_pet = 0
-        melhor_match_pet = None
-            
-        for pet_type in PET_TYPES:
-            pontuacao = fuzz.partial_ratio(pet_type, nome_limpo)
-            if pontuacao > melhor_pontuacao_pet:
-                melhor_pontuacao_pet = pontuacao
-                melhor_match_pet = pet_type
+            # 1°-TENTATIVA. CLASSIFICAR COMO CONSUMABLE PELO NOME
+            for consumable in CONSUMABLE_TITLE:
+                if fuzz.partial_ratio(consumable, nome_limpo) >= LIMITE_DE_CONFIANCA_GERAL:
+                    item_data['class'] = "consumables"
+                    break
 
-        if melhor_pontuacao_pet >= LIMITE_DE_CONFIANCA_PET:
-            item_data['class'] = "Pet"
-            item_data['pet_type'] = melhor_match_pet
-        
-        # 2°-TENTATIVA. CLASSIFICAR COMO DYE PELO NOME 
+            # 2°-TENTATIVA. CLASSIFICAR COMO DYE PELO NOME 
+            if fuzz.partial_ratio("dye", nome_limpo) >= LIMITE_DE_CONFIANCA_GERAL:
+                item_data['class'] = "Dye" 
+                
+            # 3°-TENTATIVA. CLASSIFICAR COMO RUNE PELO NOME 
+            elif fuzz.partial_ratio("rune", nome_limpo) >= LIMITE_DE_CONFIANCA_GERAL:
+                item_data['class'] = "Rune"
 
-        if fuzz.partial_ratio("dye", nome_limpo) >= 90:
-            item_data['class'] = "Dye" 
-        
-        # 3°-TENTATIVA. CLASSIFICAR COMO RUNE PELO NOME 
-
-        if fuzz.partial_ratio("rune", nome_limpo) >= 90:
-            item_data['class'] = "Rune"
+            # 4°-TENTATIVA. CLASSIFICAR COMO PET PELO NOME
+            elif melhor_pontuacao_pet >= LIMITE_DE_CONFIANCA_PET:
+                item_data['class'] = "Pet"
+                item_data['pet_type'] = melhor_match_pet
+            #preciso fazer algo para caso tenha uma classe já definida, não sobrescreva
         
         #FUNÇÃO DE BACKUP(CASO NÃO TENHA ENCONTRADO VALORES AINDA)
         for line in lines[1:]: # Começa da segunda linha
@@ -157,6 +180,8 @@ class HypixelItemAnalyzer:
                     item_data['class'] = "Item(dungeon)"
                 elif any(keyword in line_clean for keyword in COSMETIC_KEYWORDS):
                     item_data['class'] = "Cosmetic"
+                elif any(keyword in line_clean for keyword in CONSUMABLES):
+                    item_data['class'] = "Consumables"
                                     
                         
         return item_data
