@@ -8,7 +8,7 @@ from ultralytics import YOLO
 import json
 import keyboard
 import os
-from see_the_screen.item_parser import parse_item_data 
+from item_parser import parse_item_data 
 import re
 
 class HypixelItemAnalyzer:
@@ -95,32 +95,22 @@ class HypixelItemAnalyzer:
     def save_detection(self, detection):
         """Salva a detecção em uma subpasta baseada na classe do item."""
         
-        # 1. Pega a classe do item de forma segura. Se não houver, usa 'null'.
-        # O .get('item_data', {}) previne erro se 'item_data' não existir.
-        # O .get('class') retorna None se a classe não for encontrada.
         item_class = detection.get('item_data', {}).get('class')
         
-        # Se a classe for None ou uma string vazia, usamos a pasta 'null'.
         if not item_class:
             class_folder_name = "null"
         else:
             class_folder_name = item_class
 
-        # (Opcional, mas recomendado) Sanitiza o nome para evitar caracteres inválidos em pastas
-        # Ex: "Item(dungeon)" vira "Itemdungeon"
         class_folder_name = re.sub(r'[<>:"/\\|?*()]', '', class_folder_name)
 
-        # 2. Cria o caminho para a subpasta (ex: "detections/Pet")
         class_folder_path = os.path.join(self.output_folder, class_folder_name)
 
-        # 3. Cria a subpasta se ela não existir.
         os.makedirs(class_folder_path, exist_ok=True)
 
-        # 4. Cria o nome do arquivo e o caminho final
         filename = f"detection_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         filepath = os.path.join(class_folder_path, filename)
 
-        # 5. Salva o arquivo JSON
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(detection, f, ensure_ascii=False, indent=2)
             

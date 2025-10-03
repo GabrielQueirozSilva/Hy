@@ -1,7 +1,7 @@
 # item_parser.py
 import re
 from thefuzz import fuzz, process
-from see_the_screen.constants import *
+from constants import *
 
  
 def parse_item_data(self, text):
