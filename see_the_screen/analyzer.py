@@ -9,6 +9,7 @@ import json
 import keyboard
 import os
 from item_parser import parse_item_data 
+from pymongo import MongoClient
 import re
 
 class HypixelItemAnalyzer:
@@ -17,6 +18,9 @@ class HypixelItemAnalyzer:
         self.conf_threshold = conf_threshold
         self.running = True
         self.save_requested = False
+        self.client = MongoClient("mongodb://localhost:27017")
+        self.db = self.client["hypixel_scans"]
+        self.col = self.db["items"]
         
         print("Carregando modelo EasyOCR na memória...")
         self.reader = easyocr.Reader(['en']) 
@@ -68,12 +72,11 @@ class HypixelItemAnalyzer:
 
             for det in detections:
                 bbox = det['bbox']
-                text = self.extract_roi_text(screen, bbox) 
-                
+                identified_text = self.extract_roi_text(screen, bbox) 
 
-                item_data = parse_item_data(text) 
+                item_data, sanitized_text = parse_item_data(identified_text) 
                 
-                current_analysis.append({'bbox': bbox, 'confidence': det['confidence'], 'text': text, 'item_data': item_data, 'timestamp': datetime.now().strftime("%H:%M:%S")})
+                current_analysis.append({'bbox': bbox, 'confidence': det['confidence'], 'raw_text': identified_text, 'sanitized_text': sanitized_text, 'item_data': item_data, 'timestamp': datetime.now().strftime("%H:%M:%S")})
                 cv2.rectangle(display_frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 255, 0), 2)
                 cv2.putText(display_frame, f'Item: {det["confidence"]:.2f}', (bbox[0], bbox[1]-10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
             
@@ -91,30 +94,38 @@ class HypixelItemAnalyzer:
         print("Análise encerrada.")
     
     def request_save(self): self.save_requested = True
+    
     def stop_analysis(self): self.running = False
+    
     def save_detection(self, detection):
-        """Salva a detecção em uma subpasta baseada na classe do item."""
-        
-        item_class = detection.get('item_data', {}).get('class')
-        
-        if not item_class:
-            class_folder_name = "null"
-        else:
-            class_folder_name = item_class
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
-        class_folder_name = re.sub(r'[<>:"/\\|?*()]', '', class_folder_name)
+        document = {
+            "scan_timestamp": timestamp,
+            "raw_text": detection.get("raw_text"),
+            "sanitized_text": detection.get("sanitized_text"),
+            "parsed": detection.get("item_data"),
+            "bbox": detection.get("bbox"),
+            "confidence": detection.get("confidence")
+        }
 
-        class_folder_path = os.path.join(self.output_folder, class_folder_name)
+        # manter versão sem _id para o JSON
+        json_safe_document = document.copy()
 
-        os.makedirs(class_folder_path, exist_ok=True)
+        self.col.insert_one(document)
 
-        filename = f"detection_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        filepath = os.path.join(class_folder_path, filename)
+        os.makedirs(self.output_folder, exist_ok=True)
+        filename = f"detection_{timestamp}.json"
+        filepath = os.path.join(self.output_folder, filename)
 
         with open(filepath, 'w', encoding='utf-8') as f:
-            json.dump(detection, f, ensure_ascii=False, indent=2)
-            
-        print(f"💾 Detecção salva em: {filepath}")
+            json.dump(json_safe_document, f, ensure_ascii=False, indent=2)
+
+        print(f"💾 JSON salvo: {filepath}")
+        print("🗄️ MongoDB: item inserido com sucesso.")
+
+
+        
     def detect_description_boxes(self, image):
         results = self.model.predict(source=image, conf=self.conf_threshold, verbose=False)
         detections = []
@@ -123,6 +134,7 @@ class HypixelItemAnalyzer:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
                 detections.append({'bbox': (x1, y1, x2, y2), 'confidence': float(box.conf[0])})
         return detections
+    
     def display_analysis_overlay(self, frame, analysis):
         if not analysis: return
         det = max(analysis, key=lambda x: x['confidence'])

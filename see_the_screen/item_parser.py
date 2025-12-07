@@ -3,12 +3,45 @@ import re
 from thefuzz import fuzz, process
 from constants import *
 
+
+def item_sanitizer(text, context="GLOBAL"):
+    if not text: return ""
+
+    # 1. Aplica correções GLOBAIS (Sempre roda)
+    # Troca ; por : e outras limpezas básicas
+    if context == "GLOBAL":
+        for erro, correcao in GLOBAL_REPLACEMENTS.items():
+            text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)
+            
+                # --- Lógica pesada de números ---
+        # Z/z no inicio de numeros vira 2 (Z000 -> 2000)
+        text = re.sub(r'\b[Zz](?=[\d,])', '2', text)
+        # S no inicio de numeros vira 5 (S00 -> 500)
+        text = re.sub(r'\b[Ss](?=[\d,])', '5', text)
+
+    # 2. Lógica baseada no CONTEXTO
+    if context == "PRICE":
+        # Aplica dicionário de preços
+        for erro, correcao in PRICE_REPLACEMENTS.items():
+            text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)
+            
+        # O ou o vira 0
+        text = re.sub(r'\b[Oo](?=[\d,])', '0', text)
+        # # Limpeza de relógio (@Zn -> 2h)
+        # text = re.sub(r'@\s*[Zz]', '2', text)
+        # text = re.sub(r'@\s*[Ss]', '5', text)
+    
+    # Adicione outros contextos (TIER, NAME) conforme precisar...
+
+    return text
  
-def parse_item_data(self, text):
+def parse_item_data(text):
     item_data = {}
-    lines = text.splitlines()
+        
+    sanitized_text = item_sanitizer(text, context="GLOBAL")
+    lines = sanitized_text.splitlines()
     if not lines:
-        return {}
+        return {}, {}
     
     item_data['name'] = lines[0].strip()
     nome_limpo = item_data['name'].lower()
@@ -18,9 +51,15 @@ def parse_item_data(self, text):
 
     # --- ETAPA 1: EXTRAÇÃO DE DADOS BRUTOS ---           
     if len(lines) >= 5:
+        
         quinta_ultima_linha = lines[-5].strip().lower()
         quarta_ultima_linha = lines[-4].strip()
+        
+        #limpeza especifica
         terceira_ultima_linha = lines[-3].strip().lower()
+        terceira_ultima_linha = item_sanitizer(terceira_ultima_linha, context="PRICE")
+        
+        
         #ANALISE BRUTA, PRIORITÁRIA, DAS ÚLTIMAS LINHAS
         # Pega a quinta última linha para o TIER
         melhor_pontuacao_tier = 0
@@ -37,13 +76,19 @@ def parse_item_data(self, text):
             chave,valor = partes[0], partes[1]  
             chave_normalizada = chave.lower().replace('-', ':')
             if fuzz.ratio(chave_normalizada, "seller:") >= 70:
-                item_data['seller'] = valor.strip()          
+                item_data['seller'] = valor.strip()
+                          
         # Pega a terceira última linha para o PRICE    
         try:
-            parte_do_preco = terceira_ultima_linha.split(':', 1)[1]
+            linha_tratada = item_sanitizer(terceira_ultima_linha, context="PRICE")
+            lines[-3] = linha_tratada  # Atualiza a linha tratada no array original
+            sanitized_text = '\n'.join(lines)
+            
+            parte_do_preco = linha_tratada.split(':', 1)[1]
             price_str = re.sub(r'[^\d]', '', parte_do_preco)
             if price_str:
                 item_data['price'] = int(price_str)
+                
         except (IndexError, ValueError):
             item_data['price'] = None                 
 
@@ -101,9 +146,9 @@ def parse_item_data(self, text):
                 pass
         if 'class' not in item_data: 
             if any(keyword in line_clean for keyword in DUNGEON_KEYWORDS):
-                item_data['class'] = "Item(dungeon)"
+                item_data['class'] = "Item"
             elif any(keyword in line_clean for keyword in CONSUMABLES_KEYWORDS):
                 item_data['class'] = "Consumables"
                                 
                     
-    return item_data
+    return item_data, sanitized_text.lower()

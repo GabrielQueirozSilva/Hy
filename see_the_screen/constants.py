@@ -2,8 +2,8 @@
 LIMITE_DE_CONFIANCA_GERAL = 87
 LIMITE_DE_CONFIANCA_PET = 88 
 
-CONSUMABLE_TITLE = ["power scroll", "potion", "voodo doll", "bottle of jyrre", "grizzly salmon", "Pouen Scrol", "Powen Scrol", "Pouer Scrol"]
-CONSUMABLES_KEYWORDS = ["consumable", "consumables", "consumed", "consume", "click to read!", "consune", "consuned"]
+CONSUMABLE_TITLE = ["power scroll", "potion", "voodo doll", "bottle of jerry", "grizzly salmon"]
+CONSUMABLES_KEYWORDS = ["consumable", "consumables", "consumed", "consume", "click to read!"]
 TIERS = ["legendary", "epic", "rare", "common", "uncommon", "mythic", "special", "divine", "very special"]
 PET_TYPES = ["elephant", "blue whale", "enderman", "silverfish","Armadillo","endermite","glacite golem", "scatcha", "bal", "bat", "mole",
              "mithril golem", "rat", "rabbit", "tiger", "grandma wolf", "snail", "wither skeleton", "goblin", "Ankylosaurus", "black cat",
@@ -12,8 +12,62 @@ PET_TYPES = ["elephant", "blue whale", "enderman", "silverfish","Armadillo","end
              "rift ferret", "skeleton horse", "skeleton", "snowman", "spider", "squid", "tarantula", "spirit", "turtle", "t-rex", "zombie",
              "wolf", "bee", "chicken", "hedgehog", "pig", "slug", "girafe", "lion", "ocelot", "ammonite", "baby yeti", "dolphin", "flying fish",
              "megalodon", "penguin", "spinosarus", "hermit crab", "jellyfish", "parrot", "owl", "bingo", "montezuma", "wisp"]
-PRICE_KEYWORDS = ["buy it now:", "now:", "it now:", "coins", "coims", "coms", "by it now:"]
+PRICE_KEYWORDS = ["buy it now:", "it now:", "now:", "coins"]
 COSMETIC_KEYWORDS = ["skin", "pet skins", "change the look", "skin can be active", "this skin"]
-DUNGEON_KEYWORDS = ["score:", "gear", "gear score:", "Oear Scone:", "Oean Scone:"]
+DUNGEON_KEYWORDS = ["gear score:", "score:", "gear"]
 ACCESSORY_KEYWORDS = ["accessory", "acessory", "accessort", "accessont"]
-PET_ITENS_KEYWORDS = ["pet item", "pet food", "right-click to feed", "pet iten", "pet itam", "pet iteh"]
+PET_ITENS_KEYWORDS = ["pet item", "pet food", "right-click to feed",]
+
+OCR_REPLACEMENTS = {
+    ";": ":",
+    "Meat": "Heat",
+    "iten": "item", "itam": "item",
+    "nou:": "now:",
+    "Strenqth": "Strength", "Strenght": "Strength",
+    "Crit Damaqe": "Crit Damage",
+    "Damaqe": "Damage",
+    "Abi1ity": "Ability", "Abilitv": "Ability",
+    "Scone": "Score", "Scrol": "Scroll",
+    "Pouen": "Power", "Pouer": "Power",
+    "Oear": "Gear",
+    "EEnds": "Ends", "IEnds": "Ends",
+    "Helnet": "Helmet", "HELHET": "Helmet",
+    "Donus:": "Bonus:",
+    "Seller-": "Seller-",
+
+    
+    # Erros de Conectivos
+    "Endsin": "Ends in",
+}
+
+
+# 1. Correções GLOBAIS (Rodam em tudo)
+GLOBAL_REPLACEMENTS = {
+    "consune": "consume",
+    "consuned": "consumed",
+    "Oear": "Gear", "Oean": "Gear",
+    "Scone:": "Score",
+    "iten": "item", "itam": "item", "iteh": "item",
+    "Pouen": "Power", "Powen": "Power", "Pouer": "Power",
+    "Scrol": "Scroll",
+    "jyrre": "jerry",
+    "Helnet": "Helmet", "HELHET": "Helmet",
+    "Youare": "You are", "Defenseand": "Defense and",
+    ";": ":",  
+    "uhile": "While",
+    "Meat": "Heat",
+    "Nining": "Mining", "Miming": "Mining", "INining": "Mining", "(nining": "Mining", "IMining": "Mining",
+    "Refongedi": "reforged!", "berefongedi": "be reforged!", "berefongedi": "be reforged!", "refongedi": "reforged!",
+    "Defenset": "Defense", "DefenSe": "Defense", "IDefense": "Defense",
+    "innune": "imnune",
+}
+
+# 2. Correções Específicas de PREÇO (Contexto 'PRICE')
+PRICE_REPLACEMENTS = {
+    "bui": "Buy", "by": "Buy",
+    "nou:": "now:", "noew:": "now:",
+    "coims": "coins", "coms": "coins", "corns": "coins",
+    "Endsin": "Ends in", "endsin": "Ends in",
+    "Buyit": "Buy it",
+    "IBuy": "Buy",
+}
