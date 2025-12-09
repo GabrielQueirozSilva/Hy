@@ -15,7 +15,7 @@ PET_TYPES = ["elephant", "blue whale", "enderman", "silverfish","Armadillo","end
 PRICE_KEYWORDS = ["buy it now:", "it now:", "now:", "coins"]
 COSMETIC_KEYWORDS = ["skin", "pet skins", "change the look", "skin can be active", "this skin"]
 DUNGEON_KEYWORDS = ["gear score:", "score:", "gear"]
-ACCESSORY_KEYWORDS = ["accessory", "acessory", "accessort", "accessont"]
+ACCESSORY_KEYWORDS = ["accessory"]
 PET_ITENS_KEYWORDS = ["pet item", "pet food", "right-click to feed",]
 
 OCR_REPLACEMENTS = {
@@ -43,29 +43,43 @@ OCR_REPLACEMENTS = {
 
 # 1. Correções GLOBAIS (Rodam em tudo)
 GLOBAL_REPLACEMENTS = {
-    "consune": "consume",
-    "consuned": "consumed",
-    "Oear": "Gear", "Oean": "Gear",
-    "Scone:": "Score",
-    "iten": "item", "itam": "item", "iteh": "item",
-    "Pouen": "Power", "Powen": "Power", "Pouer": "Power",
-    "Scrol": "Scroll",
-    "jyrre": "jerry",
+    "accessort": "accessory", "accessont": "accessory",
+    "acessory": "accessory",
+    "Conpacton": "compactor",
+    "@Ruudras Heant": "Rudras Heart",
+    # "Refongedi": "reforged!", "berefongedi": "be reforged!", "berefongedi": "be reforged!", "refongedi": "reforged!", "bereforged": "be reforged!",
+    "Defenset": "Defense", "DefenSe": "Defense", "IDefense": "Defense", "defense_": "Defense",
+    "Dox": "Box",
+    "HegenonyAntiface": "Hegemony Artifact", "Antifact": "Artifact",
     "Helnet": "Helmet", "HELHET": "Helmet",
-    "Youare": "You are", "Defenseand": "Defense and",
-    ";": ":",  
-    "uhile": "While",
+    "Hining": "Mining",
+    "iten": "item", "itam": "item", "iteh": "item",
+    "jyrre": "jerry",
     "Meat": "Heat",
-    "Nining": "Mining", "Miming": "Mining", "INining": "Mining", "(nining": "Mining", "IMining": "Mining",
-    "Refongedi": "reforged!", "berefongedi": "be reforged!", "berefongedi": "be reforged!", "refongedi": "reforged!",
-    "Defenset": "Defense", "DefenSe": "Defense", "IDefense": "Defense",
-    "innune": "imnune",
+    "mtthic": "mythic", "NTTHIC": "mythic", "mtthic": "mythic", "LEgendart": "legendary", "rar": "rare",
+    "Oear": "Gear", "Oean": "Gear",
+    "Orants": "Grants",
+    "ortune": "fortune",
+    "Pouen": "Power", "Powen": "Power", "Pouer": "Power",
+    "prisn": "prism",
+    "Scone:": "Score",
+    "Scrol": "Scroll",
+    "Defenseand": "Defense and",
+    "(nining": "Mining", "Nining": "Mining", "Miming": "Mining", "INining": "Mining", "IMining": "Mining",
+    ";": ":",
+}
+
+
+SELLER_REPLACEMENTS = {
+    "sellen-": "seller:", "seller-": "seller:", "seller=": "seller:", "sellen": "seller:",
+    "[mvp ]": "[MPV]", 
+    "[vip+": "[VIP+]",
 }
 
 # 2. Correções Específicas de PREÇO (Contexto 'PRICE')
 PRICE_REPLACEMENTS = {
     "bui": "Buy", "by": "Buy",
-    "nou:": "now:", "noew:": "now:",
+    "nou:": "now:", "noew:": "now:", "nol:": "now:", "ol:": "now:",
     "coims": "coins", "coms": "coins", "corns": "coins",
     "Endsin": "Ends in", "endsin": "Ends in",
     "Buyit": "Buy it",

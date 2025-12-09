@@ -1,4 +1,4 @@
-Versão 00- O progama funciona a partir de uma IA e do easyOCR para indentificar itens de leilão. Ele 
+Versão 0 - O progama funciona a partir de uma IA e do easyOCR para indentificar itens de leilão. Ele 
 usa a IA para indentificar as caixas onde tem informações dos itens e o easyOCR para ler essas
 informações. Atualmente ele é dividido em 4 arquivos principais os quais:
 
@@ -18,7 +18,9 @@ o ação.py para ações de automação de leitura de tela e cliques e o exporta
 que serve para exportar os dados.json para xlsx.
 
 
-Versão 01- O programa agora tenta consertar os erros de leitura do OCR, sanitizando o texto antes de
+Versão 1 - O programa agora tenta consertar os erros de leitura do OCR, sanitizando o texto antes de
 passar para o item_parser.py. Alem disso, o item_parser.py agora retorna tanto os dados do item
 quanto o texto sanitizado, para facilitar a depuração e análise dos dados. Com tambem agora o salvamento
 sendo feito tanto na pasta detections quando em banco de dados MongoDB.
+
+Versão 1.01.09/11/2025 - Foi feita algumas adições nas constantes.py, com tambem sendo feita a lista SELLER_REPLACEMENTS. E por fim foi feito alterações no item_phaser.py para ele suportar a verificação do seller. 

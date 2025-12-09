@@ -31,7 +31,10 @@ def item_sanitizer(text, context="GLOBAL"):
         # text = re.sub(r'@\s*[Zz]', '2', text)
         # text = re.sub(r'@\s*[Ss]', '5', text)
     
-    # Adicione outros contextos (TIER, NAME) conforme precisar...
+    if context == "SELLER":
+        
+        for erro, correcao in SELLER_REPLACEMENTS.items():
+            text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)
 
     return text
  
@@ -65,18 +68,21 @@ def parse_item_data(text):
         melhor_pontuacao_tier = 0
         melhor_match_tier = None
         for tier in TIERS:
-            pontuacao = fuzz.partial_ratio(tier,quinta_ultima_linha )
+            pontuacao = fuzz.partial_ratio(tier,quinta_ultima_linha)
             if pontuacao > melhor_pontuacao_tier:
                 melhor_pontuacao_tier = pontuacao
                 melhor_match_tier = tier              
         item_data['item_tier'] = melhor_match_tier
+        
         # Pega a quarta última linha para o SELLER   
-        partes = quarta_ultima_linha.split(maxsplit=1)
+        linha_tratada = item_sanitizer(quarta_ultima_linha, context="SELLER")
+        partes = linha_tratada.split(maxsplit=1)
         if len(partes) == 2:
-            chave,valor = partes[0], partes[1]  
-            chave_normalizada = chave.lower().replace('-', ':')
-            if fuzz.ratio(chave_normalizada, "seller:") >= 70:
-                item_data['seller'] = valor.strip()
+            seller, vendedor = partes[0], partes[1]  
+            if 'seller:' in seller.lower():
+                item_data['seller'] = vendedor.strip()
+            else:
+                item_data['seller'] = None
                           
         # Pega a terceira última linha para o PRICE    
         try:
