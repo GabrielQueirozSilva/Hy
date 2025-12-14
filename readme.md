@@ -24,3 +24,8 @@ quanto o texto sanitizado, para facilitar a depuração e análise dos dados. Co
 sendo feito tanto na pasta detections quando em banco de dados MongoDB.
 
 Versão 1.01.09/11/2025 - Foi feita algumas adições nas constantes.py, com tambem sendo feita a lista SELLER_REPLACEMENTS. E por fim foi feito alterações no item_phaser.py para ele suportar a verificação do seller. 
+
+Versão 1.02.14/12/2025 - Existia um erro de correção do item_parser nos casos em que as correções
+eram feitas nas linhas específicas e não era alterado a linha sanitizada, ficando assim errada,
+isto foi corrigido, assim como uma melhoria na lógica da função item_sanitizer e na organização
+geral. Também foi altera algumas constants pois estavam sendo feitas correções inadequadas, adiconando em alguns casos letras extras.
