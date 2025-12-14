@@ -45,35 +45,42 @@ OCR_REPLACEMENTS = {
 GLOBAL_REPLACEMENTS = {
     "accessort": "accessory", "accessont": "accessory",
     "acessory": "accessory",
-    "Conpacton": "compactor",
-    "@Ruudras Heant": "Rudras Heart",
     # "Refongedi": "reforged!", "berefongedi": "be reforged!", "berefongedi": "be reforged!", "refongedi": "reforged!", "bereforged": "be reforged!",
     "Defenset": "Defense", "DefenSe": "Defense", "IDefense": "Defense", "defense_": "Defense",
-    "Dox": "Box",
-    "HegenonyAntiface": "Hegemony Artifact", "Antifact": "Artifact",
-    "Helnet": "Helmet", "HELHET": "Helmet",
+    "Endsin": "Ends in", "endsin": "Ends in", "iends": "ends",
     "Hining": "Mining",
     "iten": "item", "itam": "item", "iteh": "item",
-    "jyrre": "jerry",
-    "Meat": "Heat",
-    "mtthic": "mythic", "NTTHIC": "mythic", "mtthic": "mythic", "LEgendart": "legendary", "rar": "rare",
+    "mtthic": "mythic", "NTTHIC": "mythic", "mtthic": "mythic", "LEgendart": "legendary", "rar": "rare", "legenart": "legendary",
     "Oear": "Gear", "Oean": "Gear",
     "Orants": "Grants",
-    "ortune": "fortune",
+    " ortune": "fortune",
     "Pouen": "Power", "Powen": "Power", "Pouer": "Power",
-    "prisn": "prism",
     "Scone:": "Score",
-    "Scrol": "Scroll",
     "Defenseand": "Defense and",
     "(nining": "Mining", "Nining": "Mining", "Miming": "Mining", "INining": "Mining", "IMining": "Mining",
     ";": ":",
 }
 
+NAMES_REPLACEMENTS = {
+    "Leggingsof": "leggings of",
+    "BootsOf": "boots of", "dootsof": "boots of",
+    "Meat": "Heat",
+    "HegenonyAntiface": "Hegemony Artifact", "Antifact": "Artifact",
+    "Helnet": "Helmet", "HELHET": "Helmet",
+    "Dox": "Box",
+    "jyrre": "jerry",
+    "Conpacton": "compactor",
+    "@Ruudras Heant": "Rudras Heart",
+    "prisn": "prism",
+    "Scrol": "Scroll",
+}
+
 
 SELLER_REPLACEMENTS = {
-    "sellen-": "seller:", "seller-": "seller:", "seller=": "seller:", "sellen": "seller:",
+    "sellen-": "seller:", "seller-": "seller:", "seller=": "seller:", "sellen": "seller:", 
+    "seller ": "seller:",
     "[mvp ]": "[MPV]", 
-    "[vip+": "[VIP+]",
+    "[vip+ ": "[VIP+]",
 }
 
 # 2. Correções Específicas de PREÇO (Contexto 'PRICE')
@@ -81,7 +88,6 @@ PRICE_REPLACEMENTS = {
     "bui": "Buy", "by": "Buy",
     "nou:": "now:", "noew:": "now:", "nol:": "now:", "ol:": "now:",
     "coims": "coins", "coms": "coins", "corns": "coins",
-    "Endsin": "Ends in", "endsin": "Ends in",
     "Buyit": "Buy it",
     "IBuy": "Buy",
 }

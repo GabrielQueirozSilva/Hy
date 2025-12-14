@@ -2,14 +2,24 @@
 import re
 from thefuzz import fuzz, process
 from constants import *
+import unicodedata
 
+
+def normalize_ocr(text):
+    text = unicodedata.normalize("NFKD", text)
+    text = text.replace('\u200b', '')
+    text = text.replace('\xa0', ' ')
+    return text
 
 def item_sanitizer(text, context="GLOBAL"):
     if not text: return ""
+    text = normalize_ocr(text)
+
 
     # 1. Aplica correções GLOBAIS (Sempre roda)
     # Troca ; por : e outras limpezas básicas
     if context == "GLOBAL":
+        text = text.replace(',', '')
         for erro, correcao in GLOBAL_REPLACEMENTS.items():
             text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)
             
@@ -18,9 +28,13 @@ def item_sanitizer(text, context="GLOBAL"):
         text = re.sub(r'\b[Zz](?=[\d,])', '2', text)
         # S no inicio de numeros vira 5 (S00 -> 500)
         text = re.sub(r'\b[Ss](?=[\d,])', '5', text)
+        
+    elif context == "NAME":
+        for erro, correcao in NAMES_REPLACEMENTS.items():
+            text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)
 
     # 2. Lógica baseada no CONTEXTO
-    if context == "PRICE":
+    elif context == "PRICE":
         # Aplica dicionário de preços
         for erro, correcao in PRICE_REPLACEMENTS.items():
             text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)
@@ -31,8 +45,7 @@ def item_sanitizer(text, context="GLOBAL"):
         # text = re.sub(r'@\s*[Zz]', '2', text)
         # text = re.sub(r'@\s*[Ss]', '5', text)
     
-    if context == "SELLER":
-        
+    elif context == "SELLER":
         for erro, correcao in SELLER_REPLACEMENTS.items():
             text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)
 
@@ -46,8 +59,11 @@ def parse_item_data(text):
     if not lines:
         return {}, {}
     
-    item_data['name'] = lines[0].strip()
-    nome_limpo = item_data['name'].lower()
+    primeira_linha = lines[0].strip().lower()
+    primeira_linha = item_sanitizer(primeira_linha, context="NAME")
+    item_data['name'] = lines[0].strip().lower()
+    nome_limpo = item_data['name']
+    
     quinta_ultima_linha = ""
     quarta_ultima_linha = ""
     terceira_ultima_linha = ""
@@ -56,13 +72,19 @@ def parse_item_data(text):
     if len(lines) >= 5:
         
         quinta_ultima_linha = lines[-5].strip().lower()
-        quarta_ultima_linha = lines[-4].strip()
+        
+        quarta_ultima_linha = lines[-4].strip().lower()
+        quarta_ultima_linha = item_sanitizer(quarta_ultima_linha, context="SELLER")
         
         #limpeza especifica
         terceira_ultima_linha = lines[-3].strip().lower()
         terceira_ultima_linha = item_sanitizer(terceira_ultima_linha, context="PRICE")
         
-        
+        lines[0] = primeira_linha  # Atualiza a linha tratada no array original
+        lines[-4] = quarta_ultima_linha  # Atualiza a linha tratada no array original
+        lines[-3] = terceira_ultima_linha  # Atualiza a linha tratada no array original
+        sanitized_text = '\n'.join(lines)
+
         #ANALISE BRUTA, PRIORITÁRIA, DAS ÚLTIMAS LINHAS
         # Pega a quinta última linha para o TIER
         melhor_pontuacao_tier = 0
@@ -75,8 +97,7 @@ def parse_item_data(text):
         item_data['item_tier'] = melhor_match_tier
         
         # Pega a quarta última linha para o SELLER   
-        linha_tratada = item_sanitizer(quarta_ultima_linha, context="SELLER")
-        partes = linha_tratada.split(maxsplit=1)
+        partes = quarta_ultima_linha.split(maxsplit=1)
         if len(partes) == 2:
             seller, vendedor = partes[0], partes[1]  
             if 'seller:' in seller.lower():
@@ -86,11 +107,8 @@ def parse_item_data(text):
                           
         # Pega a terceira última linha para o PRICE    
         try:
-            linha_tratada = item_sanitizer(terceira_ultima_linha, context="PRICE")
-            lines[-3] = linha_tratada  # Atualiza a linha tratada no array original
-            sanitized_text = '\n'.join(lines)
             
-            parte_do_preco = linha_tratada.split(':', 1)[1]
+            parte_do_preco = terceira_ultima_linha.split(':', 1)[1]
             price_str = re.sub(r'[^\d]', '', parte_do_preco)
             if price_str:
                 item_data['price'] = int(price_str)
