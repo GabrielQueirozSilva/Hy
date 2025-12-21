@@ -2,3 +2,5 @@ comercialhelper/
 detections/
 /old
 relatorio_itens.xlsx
+__pycache__/
+/I_A_Htest
