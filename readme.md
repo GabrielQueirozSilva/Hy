@@ -1,5 +1,6 @@
-PARA RODAR O CÓDIGO, VÁ PARA A PASTA PRINCIPAL DO PROJETO E USE python -m I_A_H.main
+PARA RODAR O CÓDIGO PRINCIPAL, VÁ PARA A PASTA PRINCIPAL DO PROJETO E USE python -m I_A_H.main
 
+Versão 3 - PARA RODAR A PARTE DO ETL É NECESSARIO FAZER O SEGUINTE COMANDO NO TERMINAL: python -m I_A_H.ETL.run_etl (lembrando de estar na pasta raiz do projeto).
 
 Versão 0 
 O progama funciona a partir de uma IA e do easyOCR para indentificar itens de leilão. Ele 
@@ -80,6 +81,3 @@ ETL finalizado
 
 
 Teve 2 tabelas que estam vindo nulls, apesar de terem dados, devo corrigir isso futuramente, tais tabelas foram a scan_timestamp e a confidence.
-
-Para rodar a parte do ETL é necessario fazer o seguinte comando no terminal: python -m I_A_H.ETL.run_etl (lembrando de estar na pasta raiz do projeto).
-
