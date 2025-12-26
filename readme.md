@@ -1,6 +1,48 @@
-PARA RODAR O CÓDIGO PRINCIPAL, VÁ PARA A PASTA PRINCIPAL DO PROJETO E USE python -m I_A_H.main
+## **Como executar o projeto**
 
-ETL - PARA RODAR A PARTE DO ETL É NECESSARIO FAZER O SEGUINTE COMANDO NO TERMINAL: python -m I_A_H.ETL.run_etl (lembrando de estar na pasta raiz do projeto).
+### **MAIN**
+
+Para rodar o código principal do projeto, navegue até a pasta raiz do repositório e execute:
+
+```bash
+python -m I_A_H.main
+```
+
+
+### **ELT**
+
+O pipeline ETL é responsável por processar os dados brutos armazenados no MongoDB e carregá-los no PostgreSQL para fins analíticos.
+
+Pré-requisitos
+
+Python 3.11 (versão estável e compatível com psycopg2)
+
+PostgreSQL em execução
+
+MongoDB em execução
+
+Dependências instaladas no ambiente virtual
+
+Criação do ambiente virtual (recomendado)
+
+Na pasta raiz do projeto:
+
+```bash
+python -m venv venv
+```
+
+Ative o ambiente virtual:
+
+```bash
+venv\Scripts\Activate
+```
+
+Roda o ETL
+
+```bash
+python -m I_A_H.ETL.run_etl
+```
+
 
 ---
 ## **Versão 0**
@@ -105,3 +147,34 @@ ETL finalizado
 Teve 2 tabelas que estam vindo nulls, apesar de terem dados, devo corrigir isso futuramente, tais tabelas foram a scan_timestamp e a confidence.
 
 ---
+
+
+## **Versão 3.01 – 26/12/2025**
+
+Nesta versão, foi adicionada também a persistência dos registros inválidos no PostgreSQL, permitindo análises posteriores sobre falhas de OCR, inconsistências de dados e oportunidades de melhoria no processo de sanitização e parsing.
+
+Durante essa refatoração, a lógica de criação das tabelas foi movida do módulo load para o módulo schemas, respeitando a separação correta de responsabilidades:
+
+schemas: DDL (Data Definition Language)
+
+load: DML (Data Manipulation Language)
+
+run: orquestração do fluxo
+
+Essa mudança revelou um problema crítico de compatibilidade entre o psycopg2 e a versão do Python utilizada inicialmente (3.13), resultando no seguinte erro:
+
+```bash
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe3 in position 96: invalid continuation byte
+```
+
+A solução adotada foi a criação de um ambiente virtual utilizando o Python 3.11, versão estável e plenamente compatível com o driver PostgreSQL. Após a migração para a venv, foram necessários apenas pequenos ajustes de nomenclatura no código, e o pipeline voltou a executar corretamente.
+
+Essa experiência reforçou a importância de:
+
+utilizar versões estáveis do Python em projetos que dependem de drivers nativos,
+
+isolar o ambiente de execução com venv,
+
+separar claramente responsabilidades dentro da arquitetura do ETL
+
+Apesar de ser a melhor resposta, ainda me incomoda ter que criar uma venv.

@@ -4,3 +4,4 @@ detections/
 relatorio_itens.xlsx
 __pycache__/
 /I_A_Htest
+venv/

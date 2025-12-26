@@ -1,12 +1,15 @@
 from I_A_H.ETL.extract import Extrator
 from I_A_H.ETL.transform import transformar_documento
-from I_A_H.ETL.schemas import validar_item
+from I_A_H.ETL.schemas import *
 from I_A_H.ETL.load import load_data
 
 
 def run():
-    print("I_A_H")
 
+
+    create_database_if_not_exists()
+    create_tables()
+    
     extrator = Extrator()
     documentos_raw = extrator.extrair_dados()
 
@@ -29,11 +32,14 @@ def run():
         except Exception as e:
             print(f"Erro ao processar documento {doc.get('_id')}: {e}")
 
-    print(f"Registros válidos: {len(dados_validos)}")
-    print(f"Registros inválidos: {len(dados_invalidos)}")
+    print(f"Registros validos: {len(dados_validos)}")
+    print(f"Registros invalidos: {len(dados_invalidos)}")
 
     if dados_validos:
-        load_data(dados_validos)
+        load_data(dados_validos,True)
+
+    if dados_invalidos:
+        load_data(dados_invalidos,False)
 
     print("ETL finalizado")
 
