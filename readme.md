@@ -5,7 +5,7 @@ ETL - PARA RODAR A PARTE DO ETL É NECESSARIO FAZER O SEGUINTE COMANDO NO TERMIN
 
 
 
-**Versão 0 **
+**Versão 0**
 
 O progama funciona a partir de uma IA e do easyOCR para indentificar itens de leilão. Ele 
 usa a IA para indentificar as caixas onde tem informações dos itens e o easyOCR para ler essas
@@ -45,14 +45,14 @@ Foi feita algumas adições nas constantes.py, com tambem sendo feita a lista SE
 
 
 
-**Versão 1.02 – 14/12/2025 **
+**Versão 1.02 – 14/12/2025**
 
 Existia um erro de correção do item_parser nos casos em que as correções eram feitas nas linhas específicas e não era alterado a linha sanitizada, ficando assim errada, isto foi corrigido, assim como uma melhoria na lógica da função item_sanitizer e na organização geral. Também foi altera algumas constants pois estavam sendo feitas correções inadequadas, adiconando em alguns casos letras extras.
 
 
 
 
-**Versão 2.0 – 21/12/2025 **
+**Versão 2.0 – 21/12/2025**
 
 Eu estava cometendo alguns erros, primeiro estava tentando ligar diretamente o PowerBI com os dados do mongodb para fazer a analise estatística dos dados, estava dando muito errado, e depois aprendi que essas ferramentas não se conversão bem entre sí. Agora pretendo fazer o uso do MongoDB (que fica a data crua) -> ETL (python) -> PostgreSQL -> PowerBI. Atualmente estou na parte do MongoDB. Aproveitando tamanha mudança, mudei a estrutura dos dados. Fiz uma pasta principal, a raiz do projeto, de nome I_A_H, nesa separei melhor as funções, ja que antes estava começando a misturar tudo com o parser.py fazendo a sanitização e o parser, o analyzer fazendo a analise das informações e o salvamento no MongoDB. Nessa nova pasta tudo vai ficar devidamente separado e mais organizado. Ajeitei também alguns bugs que ocorreram devido a divisão e fiz uma minuscula melhora no item_parse
 
