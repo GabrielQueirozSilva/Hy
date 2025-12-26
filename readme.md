@@ -2,8 +2,7 @@ PARA RODAR O CÓDIGO PRINCIPAL, VÁ PARA A PASTA PRINCIPAL DO PROJETO E USE pyth
 
 ETL - PARA RODAR A PARTE DO ETL É NECESSARIO FAZER O SEGUINTE COMANDO NO TERMINAL: python -m I_A_H.ETL.run_etl (lembrando de estar na pasta raiz do projeto).
 
-
---
+---
 ## **Versão 0**
 
 O progama funciona a partir de uma IA e do easyOCR para indentificar itens de leilão. Ele 
@@ -24,7 +23,8 @@ Alem desses arquivos principais, o progama também usa um arquivo .gitignore par
 certos arquivos e pastas que não são necessários para o funcionamento do progama, assim como
 o ação.py para ações de automação de leitura de tela e cliques e o exportando.py
 que serve para exportar os dados.json para xlsx.
---
+
+---
 
 
 ## **Versão 1** 
@@ -32,21 +32,24 @@ que serve para exportar os dados.json para xlsx.
 O programa agora tenta consertar os erros de leitura do OCR, sanitizando o texto antes de
 passar para o item_parser.py. Alem disso, o item_parser.py agora retorna tanto os dados do item
 quanto o texto sanitizado, para facilitar a depuração e análise dos dados. Com tambem agora o salvamento sendo feito tanto na pasta detections quando em banco de dados MongoDB.
---
+
+---
 
 
 
 ## **Versão 1.01 – 09/11/2025**
 
 Foi feita algumas adições nas constantes.py, com tambem sendo feita a lista SELLER_REPLACEMENTS. E por fim foi feito alterações no item_phaser.py para ele suportar a verificação do seller. 
---
+
+---
 
 
 
 ## **Versão 1.02 – 14/12/2025**
 
 Existia um erro de correção do item_parser nos casos em que as correções eram feitas nas linhas específicas e não era alterado a linha sanitizada, ficando assim errada, isto foi corrigido, assim como uma melhoria na lógica da função item_sanitizer e na organização geral. Também foi altera algumas constants pois estavam sendo feitas correções inadequadas, adiconando em alguns casos letras extras.
--- 
+
+---
 
 
 
@@ -66,7 +69,8 @@ ETL (Python)
 PostgreSQL
   ↓
 Power BI
---
+
+---
 
 
 
@@ -90,11 +94,14 @@ __init__: garante o correto funcionamento do pacote (me recomendaram fazer isso 
 
 Atualmente, o ETL já executa com sucesso a separação entre dados válidos e inválidos, apesar de carregar apenas os validos no PostgreSQL, os proximos passos que busco fazer são justamente referentes a essa etapa. Esse foi o primeiro log de resultado que fiz nos dados iniciais que peguei bem no começo de tudo:
 
+```bash
 58 documentos extraidos do MongoDB
 Registros válidos: 13
 Registros inválidos: 45
 13 registros carregados no PostgreSQL
 ETL finalizado
-
+```
 
 Teve 2 tabelas que estam vindo nulls, apesar de terem dados, devo corrigir isso futuramente, tais tabelas foram a scan_timestamp e a confidence.
+
+---
