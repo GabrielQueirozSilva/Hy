@@ -178,3 +178,15 @@ isolar o ambiente de execução com venv,
 separar claramente responsabilidades dentro da arquitetura do ETL
 
 Apesar de ser a melhor resposta, ainda me incomoda ter que criar uma venv.
+
+---
+
+
+##  **Versão 3.02 – 01/01/2026**
+Foram feitas modificações/correções menores:
+
+1: Correção de timestamp sempre vir null no PG;
+2: A remoção do salvamento da confidence no PG;
+3: Adição da classe equipaments para tornar mais items validos;
+4: Pequena atualização no constants.py;
+
