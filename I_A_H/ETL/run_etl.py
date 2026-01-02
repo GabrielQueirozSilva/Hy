@@ -14,7 +14,6 @@ def run():
     documentos_raw = extrator.extrair_dados()
 
     print(f"{len(documentos_raw)} documentos extraidos do MongoDB")
-
     dados_validos = []
     dados_invalidos = []
 

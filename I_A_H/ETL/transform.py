@@ -11,6 +11,7 @@ def transformar_documento(doc):
 
     return {
         "id": str(doc.get("_id")),
+        "scan_timestamp": doc.get("scan_timestamp"),
         "raw_text": raw_text,
         "sanitized_text": sanitized_text,
         "parsed": item_data

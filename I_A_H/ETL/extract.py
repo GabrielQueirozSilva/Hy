@@ -6,7 +6,7 @@ class Extrator:
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
 
-    def extrair_dados(self, collection_name="items"): #lembra de mudar items para raws_items dps
+    def extrair_dados(self, collection_name="raw_scans"): #lembra de mudar items para raw_scans dps
         collection = self.db[collection_name]
         documentos = []
 
