@@ -27,7 +27,6 @@ def load_data(registros, validade):
             tier,
             price,
             seller,
-            confidence,
             is_valid,
             created_at
         )
@@ -39,7 +38,6 @@ def load_data(registros, validade):
             %(tier)s,
             %(price)s,
             %(seller)s,
-            %(confidence)s,
             %(is_valid)s,
             %(created_at)s
         )
@@ -55,7 +53,6 @@ def load_data(registros, validade):
             tier,
             price,
             seller,
-            confidence,
             is_valid,
             created_at
         )
@@ -67,7 +64,6 @@ def load_data(registros, validade):
             %(tier)s,
             %(price)s,
             %(seller)s,
-            %(confidence)s,
             %(is_valid)s,
             %(created_at)s
         )
@@ -83,7 +79,6 @@ def load_data(registros, validade):
             "tier": item["parsed"].get("item_tier"),
             "price": item["parsed"].get("price"),
             "seller": item["parsed"].get("seller"),
-            "confidence": item.get("confidence"),
             "is_valid": item.get("is_valid", True),
             "created_at": datetime.utcnow()
         })

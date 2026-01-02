@@ -86,7 +86,6 @@ def create_tables():
         tier TEXT,
         price BIGINT,
         seller TEXT,
-        confidence FLOAT,
         is_valid BOOLEAN,
         created_at TIMESTAMP DEFAULT NOW()
     );
@@ -102,7 +101,6 @@ def create_tables():
         tier TEXT,
         price BIGINT,
         seller TEXT,
-        confidence FLOAT,
         is_valid BOOLEAN,
         created_at TIMESTAMP DEFAULT NOW()
     );

@@ -2,6 +2,7 @@
 LIMITE_DE_CONFIANCA_GERAL = 87
 LIMITE_DE_CONFIANCA_PET = 88 
 
+EQUIPAMENT_TITLES = ["helmet", "chestplate", "leggings", "boots", "sword", "bow", "pickaxe", "axe", "shovel", "fishing rod"]
 CONSUMABLE_TITLE = ["power scroll", "potion", "voodo doll", "bottle of jerry", "grizzly salmon"]
 CONSUMABLES_KEYWORDS = ["consumable", "consumables", "consumed", "consume", "click to read!"]
 TIERS = ["legendary", "epic", "rare", "common", "uncommon", "mythic", "special", "divine", "very special"]
@@ -73,6 +74,7 @@ NAMES_REPLACEMENTS = {
     "@Ruudras Heant": "Rudras Heart",
     "prisn": "prism",
     "Scrol": "Scroll",
+    "artifactof": "artifact of", 
 }
 
 

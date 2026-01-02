@@ -91,6 +91,9 @@ def parse_item_data(text):
         elif any(fuzz.partial_ratio(keyword, quinta_ultima_linha) >= LIMITE_DE_CONFIANCA_GERAL for keyword in ACCESSORY_KEYWORDS):
             item_data['class'] = "Accessory"
             
+        elif any(fuzz.partial_ratio(keyword, nome_limpo) >= LIMITE_DE_CONFIANCA_GERAL for keyword in EQUIPAMENT_TITLES):
+            item_data['class'] = "Equipment"
+            
         #TENTATIVAS APENAS PELO NOME DO ITEM
         # 3°-TENTATIVA. CLASSIFICAR COMO COSMECT PELO NOME 
         elif any(fuzz.partial_ratio(keyword, nome_limpo) >= LIMITE_DE_CONFIANCA_GERAL for keyword in COSMETIC_KEYWORDS):  
