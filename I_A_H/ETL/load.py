@@ -76,7 +76,7 @@ def load_data(registros, validade):
             "scan_timestamp": item.get("scan_timestamp"),
             "name": item["parsed"].get("name"),
             "class": item["parsed"].get("class"),
-            "tier": item["parsed"].get("item_tier"),
+            "tier": item["parsed"].get("tier"),
             "price": item["parsed"].get("price"),
             "seller": item["parsed"].get("seller"),
             "is_valid": item.get("is_valid", True),

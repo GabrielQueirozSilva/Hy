@@ -46,7 +46,7 @@ def parse_item_data(text):
             if pontuacao > melhor_pontuacao_tier:
                 melhor_pontuacao_tier = pontuacao
                 melhor_match_tier = tier              
-        item_data['item_tier'] = melhor_match_tier
+        item_data['tier'] = melhor_match_tier
         
         # Pega a quarta última linha para o SELLER   
         partes = quarta_ultima_linha.split(maxsplit=1)
@@ -80,7 +80,7 @@ def parse_item_data(text):
                 melhor_match_pet = pet_type
                 
     #Caso especial, caso o item estaja classificado como special ou very special,
-        if ('item_tier' in item_data) and (item_data['item_tier'] == "special" or item_data['item_tier'] == "very special"):
+        if ('tier' in item_data) and (item_data['tier'] == "special" or item_data['tier'] == "very special"):
             item_data['class'] = "special_item" 
         
         #TENTAIVAS PELA QUINTA ÚLTIMA LINHA E PELO NOME DO ITEM

@@ -5,9 +5,11 @@ def transformar_documento(doc):
 
     item_data, sanitized_text = parse_item_data(raw_text)
 
-    item_data.setdefault("class", "Unknown")
-    item_data.setdefault("item_tier", "Unknown")
-    item_data.setdefault("seller", "Unknown")
+    if "seller" not in item_data:
+        item_data["seller"] = None
+
+    if "pet_type" not in item_data:
+        item_data["pet_type"] = None
 
     return {
         "id": str(doc.get("_id")),

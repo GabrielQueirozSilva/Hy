@@ -1,32 +1,31 @@
 import psycopg2
 
 def validar_item(item: dict) -> bool:
-    parsed = item.get("parsed", {})
+    parsed = item.get("parsed")
 
-    obrigatorios = [
-        "name",
-        "class",
-        "item_tier",
-        "price"
-    ]
+    if not isinstance(parsed, dict):
+        return False
+
+    obrigatorios = ["name", "class", "tier", "price"]
 
     for campo in obrigatorios:
         if campo not in parsed:
             return False
 
-    if not isinstance(parsed["price"], int):
+    if not isinstance(parsed["name"], str) or not parsed["name"].strip():
         return False
 
-    if parsed["price"] <= 0:
+    if not isinstance(parsed["class"], str) or parsed["class"] == "Unknown":
         return False
 
-    if parsed["class"] == "Unknown":
+    if not isinstance(parsed["tier"], str) or parsed["tier"] == "Unknown":
         return False
 
-    if parsed["item_tier"] == "Unknown":
+    if not isinstance(parsed["price"], int) or parsed["price"] <= 0:
         return False
 
     return True
+
 
 
 def create_database_if_not_exists():
