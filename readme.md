@@ -204,3 +204,15 @@ Foram feitas modificações/correções menores:
 3: Deixei uma invalidação clara na classe validar item;
 
 4: Modifiquei o transform para apenas o schema definir validade e assim seguir corretamente o esquema bronze -> silver -> gold;
+
+##  **Versão 3.04 – 11/01/2026**
+Foram feitas modificações/correções menores:
+
+1: Mudei de apenas invalid para invalid_reason, para ter uma analise melhor;
+
+##  **Versão 3.05 – 12/02/2026**
+Foram feitas melhorias no parser:
+
+1: Como percebi que o sistema de detecção por linha não funcionava as vezes, fiz uma validação
+por discrêpancia, que verificava se as linhas estavam corretamente localizadas, caso não, o código
+evita fazer todas as verificações referentes a isso e vai direto para as verificações por backup;

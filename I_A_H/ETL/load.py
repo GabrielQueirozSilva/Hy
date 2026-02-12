@@ -1,20 +1,19 @@
 import psycopg2
 from datetime import datetime
 
+
 def load_data(registros, validade):
     try:
         conn = psycopg2.connect(
             host="localhost",
-            database="i_a_h_db",
+            database="i_a_h_db_divan",
             user="postgres",
             password="gabrielqs7"
         )
-        
     except Exception as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
         return
-    
-    
+
     cur = conn.cursor()
 
     if validade:
@@ -54,6 +53,7 @@ def load_data(registros, validade):
             price,
             seller,
             is_valid,
+            invalid_reason,
             created_at
         )
         VALUES (
@@ -65,6 +65,7 @@ def load_data(registros, validade):
             %(price)s,
             %(seller)s,
             %(is_valid)s,
+            %(invalid_reason)s,
             %(created_at)s
         )
         ON CONFLICT (source_mongo_id) DO NOTHING;
@@ -80,6 +81,7 @@ def load_data(registros, validade):
             "price": item["parsed"].get("price"),
             "seller": item["parsed"].get("seller"),
             "is_valid": item.get("is_valid", True),
+            "invalid_reason": item.get("invalid_reason"),
             "created_at": datetime.utcnow()
         })
 

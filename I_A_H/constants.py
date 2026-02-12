@@ -18,6 +18,7 @@ COSMETIC_KEYWORDS = ["skin", "pet skins", "change the look", "skin can be active
 DUNGEON_KEYWORDS = ["gear score:", "score:", "gear"]
 ACCESSORY_KEYWORDS = ["accessory"]
 PET_ITENS_KEYWORDS = ["pet item", "pet food", "right-click to feed",]
+SELLER_KEYWORDS = ["seller:","seller=","sellen-","sellen"]
 
 OCR_REPLACEMENTS = {
     ";": ":",
@@ -80,7 +81,7 @@ NAMES_REPLACEMENTS = {
 
 SELLER_REPLACEMENTS = {
     "sellen-": "seller:", "seller-": "seller:", "seller=": "seller:", "sellen": "seller:", 
-    "seller ": "seller:",
+    "seller ": "seller:", "sellen:": "seller:",
     "[mvp ]": "[MPV]", 
     "[vip+ ": "[VIP+]",
 }

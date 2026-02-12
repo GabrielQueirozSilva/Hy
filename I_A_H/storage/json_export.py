@@ -2,7 +2,7 @@
 import json
 import os
 
-def save_json(document: dict, folder="detections"):
+def save_json(document: dict, folder="detections_divan"):
     os.makedirs(folder, exist_ok=True)
     filename = f"detection_{document['scan_timestamp']}.json"
     path = os.path.join(folder, filename)

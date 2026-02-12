@@ -5,7 +5,8 @@ import re
 
 def parse_item_data(text):
     item_data = {}
-        
+    discrepancia = False
+
     sanitized_text = item_sanitizer(text, context="GLOBAL")
     lines = sanitized_text.splitlines()
     if not lines:
@@ -22,55 +23,65 @@ def parse_item_data(text):
 
     # --- ETAPA 1: EXTRAÇÃO DE DADOS BRUTOS ---           
     if len(lines) >= 5:
-        
         quinta_ultima_linha = lines[-5].strip().lower()
+        print(f"QUINTA ULTIMA LINHA: {quinta_ultima_linha}")
         
         quarta_ultima_linha = lines[-4].strip().lower()
+        print(f"QUARTA ULTIMA LINHA: {quarta_ultima_linha}")
         quarta_ultima_linha = item_sanitizer(quarta_ultima_linha, context="SELLER")
-        
-        #limpeza especifica
-        terceira_ultima_linha = lines[-3].strip().lower()
-        terceira_ultima_linha = item_sanitizer(terceira_ultima_linha, context="PRICE")
-        
-        lines[0] = primeira_linha  # Atualiza a linha tratada no array original
-        lines[-4] = quarta_ultima_linha  # Atualiza a linha tratada no array original
-        lines[-3] = terceira_ultima_linha  # Atualiza a linha tratada no array original
-        sanitized_text = '\n'.join(lines)
-
-        #ANALISE BRUTA, PRIORITÁRIA, DAS ÚLTIMAS LINHAS
-        # Pega a quinta última linha para o TIER
-        melhor_pontuacao_tier = 0
-        melhor_match_tier = None
-        for tier in TIERS:
-            pontuacao = fuzz.partial_ratio(tier,quinta_ultima_linha)
-            if pontuacao > melhor_pontuacao_tier:
-                melhor_pontuacao_tier = pontuacao
-                melhor_match_tier = tier              
-        item_data['tier'] = melhor_match_tier
-        
-        # Pega a quarta última linha para o SELLER   
-        partes = quarta_ultima_linha.split(maxsplit=1)
-        if len(partes) == 2:
-            seller, vendedor = partes[0], partes[1]  
-            if 'seller:' in seller.lower():
-                item_data['seller'] = vendedor.strip()
-            else:
-                item_data['seller'] = None
-                          
-        # Pega a terceira última linha para o PRICE    
-        try:
+    
+        a = fuzz.partial_ratio("seller", quarta_ultima_linha)
+        if a <= LIMITE_DE_CONFIANCA_GERAL:
+            print(f"DISCREPANCIA DETECTADA: LINHA DE SELLER COM PROBLEMA. Pontuação: {a}")
+            discrepancia = True
             
-            parte_do_preco = terceira_ultima_linha.split(':', 1)[1]
-            price_str = re.sub(r'[^\d]', '', parte_do_preco)
-            if price_str:
-                item_data['price'] = int(price_str)
+        
+        if discrepancia == False:
+            print("entrou")
+            #limpeza especifica
+            terceira_ultima_linha = lines[-3].strip().lower()
+            print(f"TERCEIRA ULTIMA LINHA: {terceira_ultima_linha}")
+            terceira_ultima_linha = item_sanitizer(terceira_ultima_linha, context="PRICE")
+            
+            lines[0] = primeira_linha  # Atualiza a linha tratada no array original
+            lines[-4] = quarta_ultima_linha  # Atualiza a linha tratada no array original
+            lines[-3] = terceira_ultima_linha  # Atualiza a linha tratada no array original
+            sanitized_text = '\n'.join(lines)
+
+            #ANALISE BRUTA, PRIORITÁRIA, DAS ÚLTIMAS LINHAS
+            # Pega a quinta última linha para o TIER
+            melhor_pontuacao_tier = 0
+            melhor_match_tier = None
+            for tier in TIERS:
+                pontuacao = fuzz.partial_ratio(tier,quinta_ultima_linha)
+                if pontuacao > melhor_pontuacao_tier:
+                    melhor_pontuacao_tier = pontuacao
+                    melhor_match_tier = tier              
+            item_data['tier'] = melhor_match_tier
+            
+            # Pega a quarta última linha para o SELLER   
+            partes = quarta_ultima_linha.split(maxsplit=1)
+            if len(partes) == 2:
+                seller, vendedor = partes[0], partes[1]  
+                if 'seller:' in seller.lower():
+                    item_data['seller'] = vendedor.strip()
+                else:
+                    item_data['seller'] = None
+                            
+            # Pega a terceira última linha para o PRICE    
+            try:
                 
-        except (IndexError, ValueError):
-            item_data['price'] = None                 
+                parte_do_preco = terceira_ultima_linha.split(':', 1)[1]
+                price_str = re.sub(r'[^\d]', '', parte_do_preco)
+                if price_str:
+                    item_data['price'] = int(price_str)
+                    
+            except (IndexError, ValueError):
+                item_data['price'] = None                 
 
 
     # --- ETAPA 2: CLASSIFICAÇÃO INTELIGENTE DAS CLASSES ---
-    if 'class' not in item_data: 
+    if 'class' not in item_data and discrepancia == False: 
         melhor_pontuacao_pet = 0
         melhor_match_pet = None
         for pet_type in PET_TYPES:
@@ -123,6 +134,13 @@ def parse_item_data(text):
                     item_data['price'] = int(price_str)
             except (IndexError, ValueError):
                 pass
+            
+        # if ('seller' not in item_data or item_data.get('seller') is None) and any(keyword in line_clean for keyword in SELLER_KEYWORDS):
+        #     partes = line_clean.split(maxsplit=1)
+        #     if len(partes) == 2:
+        #         seller, vendedor = partes[0], partes[1]  
+        #         if 'seller:' in seller.lower():
+        #             item_data['seller'] = vendedor.strip()
         if 'class' not in item_data: 
             if any(keyword in line_clean for keyword in DUNGEON_KEYWORDS):
                 item_data['class'] = "Item"

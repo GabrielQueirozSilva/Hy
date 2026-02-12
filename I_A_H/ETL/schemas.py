@@ -1,30 +1,25 @@
 import psycopg2
 
-def validar_item(item: dict) -> bool:
+def validar_item(item: dict) -> tuple[bool, str | None]:
     parsed = item.get("parsed")
 
     if not isinstance(parsed, dict):
-        return False
+        return False, "PARSED_MISSING"
+    
+    if not parsed.get("name"):
+        return False, "NAME_MISSING"
+        
+    if parsed.get("class") in (None, "Unknown"):
+        return False, "CLASS_INVALID"
 
-    obrigatorios = ["name", "class", "tier", "price"]
-
-    for campo in obrigatorios:
-        if campo not in parsed:
-            return False
-
-    if not isinstance(parsed["name"], str) or not parsed["name"].strip():
-        return False
-
-    if not isinstance(parsed["class"], str) or parsed["class"] == "Unknown":
-        return False
-
-    if not isinstance(parsed["tier"], str) or parsed["tier"] == "Unknown":
-        return False
-
-    if not isinstance(parsed["price"], int) or parsed["price"] <= 0:
-        return False
-
-    return True
+    if parsed.get("tier") in (None, "Unknown"):
+        return False, "TIER_INVALID"
+    
+    price = parsed.get("price")
+    if not isinstance(price, int) or price <= 0:
+        return False, "PRICE_INVALID"
+    
+    return True, None
 
 
 
@@ -101,6 +96,7 @@ def create_tables():
         price BIGINT,
         seller TEXT,
         is_valid BOOLEAN,
+        invalid_reason TEXT,
         created_at TIMESTAMP DEFAULT NOW()
     );
     """)
