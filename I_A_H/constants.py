@@ -88,7 +88,7 @@ SELLER_REPLACEMENTS = {
 
 # 2. Correções Específicas de PREÇO (Contexto 'PRICE')
 PRICE_REPLACEMENTS = {
-    "bui": "Buy", "by": "Buy",
+    "bui": "Buy", "by": "Buy", "ibuy": "buy",
     "nou:": "now:", "noew:": "now:", "nol:": "now:", "ol:": "now:",
     "coims": "coins", "coms": "coins", "corns": "coins",
     "Buyit": "Buy it",

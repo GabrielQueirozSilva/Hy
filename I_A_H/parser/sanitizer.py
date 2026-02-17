@@ -14,8 +14,31 @@ def item_sanitizer(text, context="GLOBAL"):
 
 
     # 1. Aplica correções GLOBAIS (Sempre roda)
-    # Troca ; por : e outras limpezas básicas
+        # Troca ; por : e outras limpezas básicas
     if context == "GLOBAL":
+        linhas = text.splitlines()
+        linhas_filtradas = []
+
+        for linha in linhas:
+            limpa = linha.strip()
+
+            # remove linhas vazias
+            if not limpa:
+                continue
+
+            # remove linhas muito pequenas
+            if len(limpa) <= 4:
+                continue
+
+            # remove linhas que são só símbolos
+            if re.fullmatch(r"[\W_]+", limpa):
+                continue
+
+            linhas_filtradas.append(linha)
+
+        text = "\n".join(linhas_filtradas)
+
+        # continua o resto do GLOBAL
         text = text.replace(',', '')
         for erro, correcao in GLOBAL_REPLACEMENTS.items():
             text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)

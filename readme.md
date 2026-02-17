@@ -216,3 +216,11 @@ Foram feitas melhorias no parser:
 1: Como percebi que o sistema de detecção por linha não funcionava as vezes, fiz uma validação
 por discrêpancia, que verificava se as linhas estavam corretamente localizadas, caso não, o código
 evita fazer todas as verificações referentes a isso e vai direto para as verificações por backup;
+
+2: Adicionei uma opção de salvar as modificações no testando_parser;
+
+3: Fiz uma nova parte no backup do item_parser dedicado a encontra o seller;
+
+4: adicionei novas possibilidades as constantes;
+
+5: Ao perceber que as vezes vinham linhas a mais por causa de pequenos erros do OCR que fazia o código criar nova linhas minusculas, adicionei uma função no sanitizer para remover linhas muito pequenas, o que resolve alguns casos de textos anteriormentes incorretos,

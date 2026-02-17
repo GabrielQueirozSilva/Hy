@@ -32,7 +32,7 @@ def parse_item_data(text):
     
         a = fuzz.partial_ratio("seller", quarta_ultima_linha)
         if a <= LIMITE_DE_CONFIANCA_GERAL:
-            print(f"DISCREPANCIA DETECTADA: LINHA DE SELLER COM PROBLEMA. Pontuação: {a}")
+            print(f"DISCREPANCIA DETECTADA: LINHAS COM PROBLEMA. Pontuação: {a}")
             discrepancia = True
             
         
@@ -135,12 +135,19 @@ def parse_item_data(text):
             except (IndexError, ValueError):
                 pass
             
-        # if ('seller' not in item_data or item_data.get('seller') is None) and any(keyword in line_clean for keyword in SELLER_KEYWORDS):
-        #     partes = line_clean.split(maxsplit=1)
-        #     if len(partes) == 2:
-        #         seller, vendedor = partes[0], partes[1]  
-        #         if 'seller:' in seller.lower():
-        #             item_data['seller'] = vendedor.strip()
+        if ('seller' not in item_data or item_data.get('seller') is None) and "seller" in line_clean:
+            partes = line_clean.split(maxsplit=1)
+            if len(partes) == 2:
+                seller, vendedor = partes[0], partes[1]  
+                if 'seller:' in seller.lower():
+                    item_data['seller'] = vendedor.strip()
+                    
+        if('tier' not in item_data or item_data.get('tier') is None) and any(keyword in line_clean for keyword in TIERS):
+            for tier in TIERS:
+                if fuzz.partial_ratio(tier, line_clean) >= LIMITE_DE_CONFIANCA_GERAL:
+                    item_data['tier'] = tier
+                    break
+                    
         if 'class' not in item_data: 
             if any(keyword in line_clean for keyword in DUNGEON_KEYWORDS):
                 item_data['class'] = "Item"
