@@ -20,14 +20,10 @@ class Extrator:
 
         return documentos
 
-#errado
-# 69856a69522ed0d0b0e173e2
-#correto
-# 698569c6c200b2b7a04fd418
 def main():
     extrator = Extrator()
     dados_extraidos = extrator.extrair_dados()
-    id = "69856ad5522ed0d0b0e173ea"
+    id = "69856b24522ed0d0b0e173f1"
     for dado in dados_extraidos:        
         if dado["_id"] == id:
             os.system('clear || cls')

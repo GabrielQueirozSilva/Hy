@@ -19,6 +19,14 @@ def item_sanitizer(text, context="GLOBAL"):
         linhas = text.splitlines()
         linhas_filtradas = []
 
+        for i, linha in enumerate(linhas):
+            l = linha.lower().strip()
+
+            if "click" in l and "inspect" in l:
+                # mantém a linha do click to inspect
+                linhas = linhas[:i+1]
+                break
+
         for linha in linhas:
             limpa = linha.strip()
 
@@ -27,7 +35,7 @@ def item_sanitizer(text, context="GLOBAL"):
                 continue
 
             # remove linhas muito pequenas
-            if len(limpa) <= 4:
+            if len(limpa) <= 5:
                 continue
 
             # remove linhas que são só símbolos

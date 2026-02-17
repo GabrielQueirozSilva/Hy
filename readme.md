@@ -223,4 +223,6 @@ evita fazer todas as verificações referentes a isso e vai direto para as verif
 
 4: adicionei novas possibilidades as constantes;
 
-5: Ao perceber que as vezes vinham linhas a mais por causa de pequenos erros do OCR que fazia o código criar nova linhas minusculas, adicionei uma função no sanitizer para remover linhas muito pequenas, o que resolve alguns casos de textos anteriormentes incorretos,
+5: Ao perceber que as vezes vinham linhas a mais por causa de pequenos erros do OCR que fazia o código criar nova linhas minusculas, adicionei uma função no sanitizer para remover linhas muito pequenas, o que resolve alguns casos de textos anteriormentes incorretos;
+
+6: Adicionei tambem a remoção de tudo depois da linha "click to inspect" para fazer uma melhor limpesa de alguns casos.
