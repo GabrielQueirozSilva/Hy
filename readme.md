@@ -225,4 +225,6 @@ evita fazer todas as verificações referentes a isso e vai direto para as verif
 
 5: Ao perceber que as vezes vinham linhas a mais por causa de pequenos erros do OCR que fazia o código criar nova linhas minusculas, adicionei uma função no sanitizer para remover linhas muito pequenas, o que resolve alguns casos de textos anteriormentes incorretos;
 
-6: Adicionei tambem a remoção de tudo depois da linha "click to inspect" para fazer uma melhor limpesa de alguns casos.
+6: Adicionei tambem a remoção de tudo depois da linha "click to inspect" para fazer uma melhor limpesa de alguns casos;
+
+7: adicionei mais umas regras no sanitizer, mais opções no constants e modifiquei o tesntando_parser para ele vazer uma varredura completa para fins de correção geral ou inidivual para testes;

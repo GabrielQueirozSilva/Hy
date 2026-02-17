@@ -65,7 +65,7 @@ GLOBAL_REPLACEMENTS = {
 
 NAMES_REPLACEMENTS = {
     "Leggingsof": "leggings of",
-    "BootsOf": "boots of", "dootsof": "boots of",
+    "BootsOf": "boots of", "dootsof": "boots of", "dootsf": "boots of",
     "Meat": "Heat",
     "HegenonyAntiface": "Hegemony Artifact", "Antifact": "Artifact",
     "Helnet": "Helmet", "HELHET": "Helmet",
@@ -81,7 +81,8 @@ NAMES_REPLACEMENTS = {
 
 SELLER_REPLACEMENTS = {
     "sellen-": "seller:", "seller-": "seller:", "seller=": "seller:", "sellen": "seller:", 
-    "seller ": "seller:", "sellen:": "seller:",
+    "seller ": "seller:", "sellen:": "seller:", "jeller:": "seller:", "sellern:": "seller:",
+    
     "[mvp ]": "[MPV]", 
     "[vip+ ": "[VIP+]",
 }

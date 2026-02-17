@@ -69,6 +69,8 @@ def item_sanitizer(text, context="GLOBAL"):
             
         # O ou o vira 0
         text = re.sub(r'\b[Oo](?=[\d,])', '0', text)
+        text = re.sub(r'(?<=0)[Qq](?=0)', '0', text)
+
         # # Limpeza de relógio (@Zn -> 2h)
         # text = re.sub(r'@\s*[Zz]', '2', text)
         # text = re.sub(r'@\s*[Ss]', '5', text)

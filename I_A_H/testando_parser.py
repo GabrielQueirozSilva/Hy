@@ -20,37 +20,79 @@ class Extrator:
 
         return documentos
 
-def main():
+def individual():
     extrator = Extrator()
     dados_extraidos = extrator.extrair_dados()
-    id = "69856b24522ed0d0b0e173f1"
+    id = "69856b60522ed0d0b0e173f6"
     for dado in dados_extraidos:        
         if dado["_id"] == id:
             os.system('clear || cls')
             item_data, sanitized_text = parse_item_data(dado["raw_text"])
             return item_data, dado['parsed'],id,sanitized_text
  
+ 
+def completo():
+   extrator = Extrator()
+   dados_extraidos = extrator.extrair_dados()
+   resultados = []
+   for dado in dados_extraidos:
+       os.system('clear || cls')
+       item_data, sanitized_text = parse_item_data(dado["raw_text"])
+       if item_data != dado['parsed']:
+           resultados.append((item_data, dado['parsed'], str(dado["_id"]), sanitized_text))
+   return resultados
 
 if __name__ == "__main__":
-    new, old, id, sanitized_text = main()
-    print(f"Texto Sanitizado:\n{sanitized_text}\n\n")
-    print(f" \n\n\nATUAL:  item_data: {old}\n\n")
-    print(f"NEW:\n Item: {new.get('name', 'N/A')}\n Tier: {new.get('tier', 'N/A')}\n Seller: {new.get('seller', 'N/A')}\n Price: {new.get('price', 'N/A')}")
-    print("\n\n\n")
-    print("deseja salvar os dados modificados? (s/n)")
+    
+    print("Deseja rodar o teste individual ou completo? (i/c)")
     resposta = input().lower()
-    if resposta == 's':
-        print("Salvando dados modificados...")
-        client = MongoClient("mongodb://localhost:27017")
-        db = client["hypixel_scans"]
-        collection = db["divan_colection"]
-        filter_query = {"_id": ObjectId(id)}
-        update_data = {"$set": {"parsed": new}}
-        result = collection.update_one(filter_query, update_data)
-        if result.modified_count > 0:
-            print("Dados modificados com sucesso!")
+    if resposta == 'i':
+        new, old, id, sanitized_text = individual()
+        print(f"Texto Sanitizado:\n{sanitized_text}\n\n")
+        print(f" \n\n\nATUAL:  item_data: {old}\n\n")
+        print(f"NEW:\n Item: {new.get('name', 'N/A')}\n Tier: {new.get('tier', 'N/A')}\n Seller: {new.get('seller', 'N/A')}\n Price: {new.get('price', 'N/A')}")
+        print("\n\n\n")
+        print("Deseja salvar os dados modificados? (s/n)")
+        resposta = input().lower()
+        if resposta == 's':
+            print("Salvando dados modificados...")
+            client = MongoClient("mongodb://localhost:27017")
+            db = client["hypixel_scans"]
+            collection = db["divan_colection"]
+            filter_query = {"_id": ObjectId(id)}
+            update_data = {"$set": {"parsed": new}}
+            result = collection.update_one(filter_query, update_data)
+            if result.modified_count > 0:
+                print("Dados modificados com sucesso!")
+            else:
+                print("matched:", result.matched_count)
+                print("modified:", result.modified_count)
         else:
-            print("matched:", result.matched_count)
-            print("modified:", result.modified_count)
+            print("Modificações descartadas.")
+    elif resposta == 'c':
+        resultados = completo()
+        for new, old, id, sanitized_text in resultados:
+            print(f"Texto Sanitizado:\n{sanitized_text}\n\n")
+            print(f" \n\n\nATUAL:  item_data: {old}\n\n")
+            print(f"NEW:\n Item: {new.get('name', 'N/A')}\n Tier: {new.get('tier', 'N/A')}\n Seller: {new.get('seller', 'N/A')}\n Price: {new.get('price', 'N/A')}")
+            print("\n\n\n")
+            print("Deseja salvar os dados modificados? (s/n)")
+            resposta = input().lower()
+            if resposta == 's':
+                print("Salvando dados modificados...")
+                client = MongoClient("mongodb://localhost:27017")
+                db = client["hypixel_scans"]
+                collection = db["divan_colection"]
+                filter_query = {"_id": ObjectId(id)}
+                update_data = {"$set": {"parsed": new}}
+                result = collection.update_one(filter_query, update_data)
+                if result.modified_count > 0:
+                    print("Dados modificados com sucesso!")
+                else:
+                    print("matched:", result.matched_count)
+                    print("modified:", result.modified_count)
+            else:
+                print("Modificações descartadas.")
     else:
-        print("Modificações descartadas.")
+        print("Resposta inválida. Por favor, escolha 'i' para individual ou 'c' para completo.")
+ 
