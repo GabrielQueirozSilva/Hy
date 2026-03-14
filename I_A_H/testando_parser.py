@@ -23,7 +23,7 @@ class Extrator:
 def individual():
     extrator = Extrator()
     dados_extraidos = extrator.extrair_dados()
-    id = "69856b60522ed0d0b0e173f6"
+    id = "69b4a62c77225ec96926e582"
     for dado in dados_extraidos:        
         if dado["_id"] == id:
             os.system('clear || cls')
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         new, old, id, sanitized_text = individual()
         print(f"Texto Sanitizado:\n{sanitized_text}\n\n")
         print(f" \n\n\nATUAL:  item_data: {old}\n\n")
-        print(f"NEW:\n Item: {new.get('name', 'N/A')}\n Tier: {new.get('tier', 'N/A')}\n Seller: {new.get('seller', 'N/A')}\n Price: {new.get('price', 'N/A')}")
+        print(f"NEW:\n Item: {new.get('name', 'N/A')}\n Tier: {new.get('tier', 'N/A')}\n Seller: {new.get('seller', 'N/A')}\n Price: {new.get('price', 'N/A')}\n Class: {new.get('class','N/A')}")
         print("\n\n\n")
         print("Deseja salvar os dados modificados? (s/n)")
         resposta = input().lower()

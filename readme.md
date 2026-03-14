@@ -211,7 +211,7 @@ Foram feitas modificações/correções menores:
 1: Mudei de apenas invalid para invalid_reason, para ter uma analise melhor;
 
 ##  **Versão 3.05 – 12/02/2026**
-Foram feitas melhorias no parser:
+Melhorias no parser:
 
 1: Como percebi que o sistema de detecção por linha não funcionava as vezes, fiz uma validação
 por discrêpancia, que verificava se as linhas estavam corretamente localizadas, caso não, o código
@@ -228,3 +228,16 @@ evita fazer todas as verificações referentes a isso e vai direto para as verif
 6: Adicionei tambem a remoção de tudo depois da linha "click to inspect" para fazer uma melhor limpesa de alguns casos;
 
 7: adicionei mais umas regras no sanitizer, mais opções no constants e modifiquei o tesntando_parser para ele vazer uma varredura completa para fins de correção geral ou inidivual para testes;
+
+##  **Versão 3.05 – 12/02/2026**
+Melhorias no parser e estrutural:
+
+1: Com o testando_parser.py eu indentifiquei mais uns casos faceis de serem resolvidos e consertei eles;
+
+2: Tirei alguns comentarios;
+
+3: criei um .env para garantir a privacidade das informações utilizadas no login dos bancos de dados agora que estou usando outras senhas;
+
+4: criei um arquivo para ler json antigos;
+
+5: criei um requeriments para baixair os pips, futuramente adiconarei no manual como usar tanto o .env como o requeriments;

@@ -24,23 +24,21 @@ def parse_item_data(text):
     # --- ETAPA 1: EXTRAÇÃO DE DADOS BRUTOS ---           
     if len(lines) >= 5:
         quinta_ultima_linha = lines[-5].strip().lower()
-        print(f"QUINTA ULTIMA LINHA: {quinta_ultima_linha}")
+        #print(f"QUINTA ULTIMA LINHA: {quinta_ultima_linha}")
         
         quarta_ultima_linha = lines[-4].strip().lower()
-        print(f"QUARTA ULTIMA LINHA: {quarta_ultima_linha}")
+        #print(f"QUARTA ULTIMA LINHA: {quarta_ultima_linha}")
         quarta_ultima_linha = item_sanitizer(quarta_ultima_linha, context="SELLER")
     
         a = fuzz.partial_ratio("seller", quarta_ultima_linha)
         if a <= LIMITE_DE_CONFIANCA_GERAL:
-            print(f"DISCREPANCIA DETECTADA: LINHAS COM PROBLEMA. Pontuação: {a}")
             discrepancia = True
             
         
         if discrepancia == False:
-            print("entrou")
             #limpeza especifica
             terceira_ultima_linha = lines[-3].strip().lower()
-            print(f"TERCEIRA ULTIMA LINHA: {terceira_ultima_linha}")
+            #print(f"TERCEIRA ULTIMA LINHA: {terceira_ultima_linha}")
             terceira_ultima_linha = item_sanitizer(terceira_ultima_linha, context="PRICE")
             
             lines[0] = primeira_linha  # Atualiza a linha tratada no array original

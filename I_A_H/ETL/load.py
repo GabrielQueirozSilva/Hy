@@ -1,17 +1,21 @@
 import psycopg2
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
+load_dotenv() 
 
 def load_data(registros, validade):
     try:
         conn = psycopg2.connect(
-            host="localhost",
-            database="i_a_h_db_divan",
-            user="postgres",
-            password="gabrielqs7"
+            host=os.getenv("POSTGRES_HOST"),
+            database=os.getenv("POSTGRES_DB"),
+            user=os.getenv("POSTGRES_USER"),
+            password=os.getenv("POSTGRES_PASSWORD")
         )
     except Exception as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
+        print(repr(e))
         return
 
     cur = conn.cursor()

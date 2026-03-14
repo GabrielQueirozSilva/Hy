@@ -78,5 +78,4 @@ def item_sanitizer(text, context="GLOBAL"):
     elif context == "SELLER":
         for erro, correcao in SELLER_REPLACEMENTS.items():
             text = re.sub(re.escape(erro), correcao, text, flags=re.IGNORECASE)
-
-    return text
+    return text.lower()

@@ -1,0 +1,5 @@
+thefuzz
+pymongo
+keyboard
+psycopg2
+python-dotenv

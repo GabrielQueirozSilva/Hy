@@ -1,4 +1,10 @@
 import psycopg2
+from dotenv import load_dotenv
+import os
+
+load_dotenv() 
+
+#LEMBRA DE MUDAR O NOME DOS BANCOS DE DADOS
 
 def validar_item(item: dict) -> tuple[bool, str | None]:
     parsed = item.get("parsed")
@@ -26,14 +32,16 @@ def validar_item(item: dict) -> tuple[bool, str | None]:
 def create_database_if_not_exists():
     try:
         conn = psycopg2.connect(
-            host="localhost",
-            database="postgres",  
-            user="postgres",
-            password="gabrielqs7"  
+            host=os.getenv("POSTGRES_HOST"),
+            database=os.getenv("POSTGRES_DB"),
+            user=os.getenv("POSTGRES_USER"),
+            password=os.getenv("POSTGRES_PASSWORD")
         )
         
     except Exception as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
+        print(repr(e))
+
         return
     
     conn.autocommit = True #PRECISA POR ISSO PARA DESLIGAR AS TRANSAÇÕES AUTOMATICAMENTE
@@ -41,13 +49,13 @@ def create_database_if_not_exists():
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT 1 FROM pg_database WHERE datname = 'i_a_h_db';
+        SELECT 1 FROM pg_database WHERE datname = 'i_a_h_db_divan';
     """)
     exists = cur.fetchone()
 
     if not exists:
-        cur.execute("CREATE DATABASE i_a_h_db;")
-        print(" Banco i_a_h_db criado")
+        cur.execute("CREATE DATABASE i_a_h_db_divan;")
+        print(" Banco i_a_h_db_divan criado")
     else:
         pass
 
@@ -59,13 +67,15 @@ def create_tables():
     
     try:
         conn = psycopg2.connect(
-            host="localhost",
-            database="i_a_h_db",
-            user="postgres",
-            password="gabrielqs7" 
+            host=os.getenv("POSTGRES_HOST"),
+            database=os.getenv("POSTGRES_DB"),
+            user=os.getenv("POSTGRES_USER"),
+            password=os.getenv("POSTGRES_PASSWORD")
         )
     except Exception as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
+        print(repr(e))
+
         return
 
     cur = conn.cursor()

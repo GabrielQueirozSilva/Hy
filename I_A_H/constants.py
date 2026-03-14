@@ -20,29 +20,6 @@ ACCESSORY_KEYWORDS = ["accessory"]
 PET_ITENS_KEYWORDS = ["pet item", "pet food", "right-click to feed",]
 SELLER_KEYWORDS = ["seller:","seller=","sellen-","sellen"]
 
-OCR_REPLACEMENTS = {
-    ";": ":",
-    "Meat": "Heat",
-    "iten": "item", "itam": "item",
-    "nou:": "now:",
-    "Strenqth": "Strength", "Strenght": "Strength",
-    "Crit Damaqe": "Crit Damage",
-    "Damaqe": "Damage",
-    "Abi1ity": "Ability", "Abilitv": "Ability",
-    "Scone": "Score", "Scrol": "Scroll",
-    "Pouen": "Power", "Pouer": "Power",
-    "Oear": "Gear",
-    "EEnds": "Ends", "IEnds": "Ends",
-    "Helnet": "Helmet", "HELHET": "Helmet",
-    "Donus:": "Bonus:",
-    "Seller-": "Seller-",
-
-    
-    # Erros de Conectivos
-    "Endsin": "Ends in",
-}
-
-
 # 1. Correções GLOBAIS (Rodam em tudo)
 GLOBAL_REPLACEMENTS = {
     "accessort": "accessory", "accessont": "accessory",
@@ -68,7 +45,7 @@ NAMES_REPLACEMENTS = {
     "BootsOf": "boots of", "dootsof": "boots of", "dootsf": "boots of",
     "Meat": "Heat",
     "HegenonyAntiface": "Hegemony Artifact", "Antifact": "Artifact",
-    "Helnet": "Helmet", "HELHET": "Helmet",
+    "Helnet": "Helmet", "HELHET": "Helmet", "helret": "Helmet",
     "Dox": "Box",
     "jyrre": "jerry",
     "Conpacton": "compactor",
