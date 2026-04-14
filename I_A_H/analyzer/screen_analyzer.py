@@ -20,7 +20,8 @@ class ScreenAnalyzer:
         results = self.model.predict(
             source=image,
             conf=self.conf_threshold,
-            verbose=False
+            verbose=False,
+            iou=0.1
         )
 
         detections = []

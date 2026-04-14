@@ -12,13 +12,13 @@ def validar_item(item: dict) -> tuple[bool, str | None]:
     if not isinstance(parsed, dict):
         return False, "PARSED_MISSING"
     
-    if not parsed.get("name"):
+    if parsed.get("name") is None:
         return False, "NAME_MISSING"
         
-    if parsed.get("class") in (None, "Unknown"):
+    if parsed.get("class") is None:
         return False, "CLASS_INVALID"
 
-    if parsed.get("tier") in (None, "Unknown"):
+    if parsed.get("tier") is None:
         return False, "TIER_INVALID"
     
     price = parsed.get("price")
@@ -48,14 +48,12 @@ def create_database_if_not_exists():
     
     cur = conn.cursor()
 
-    cur.execute("""
-        SELECT 1 FROM pg_database WHERE datname = 'i_a_h_db_divan';
-    """)
+    cur.execute("SELECT 1 FROM pg_database WHERE datname =%s;",(os.getenv("POSTGRES_DB"),))
     exists = cur.fetchone()
 
     if not exists:
-        cur.execute("CREATE DATABASE i_a_h_db_divan;")
-        print(" Banco i_a_h_db_divan criado")
+        cur.execute("CREATE DATABASE %s;",(os.getenv("POSTGRES_DB"),))
+        print(" Banco criado")
     else:
         pass
 
@@ -64,7 +62,6 @@ def create_database_if_not_exists():
     conn.close()
 
 def create_tables():
-    
     try:
         conn = psycopg2.connect(
             host=os.getenv("POSTGRES_HOST"),
@@ -75,13 +72,11 @@ def create_tables():
     except Exception as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
         print(repr(e))
-
         return
 
     cur = conn.cursor()
-
     cur.execute("""
-    CREATE TABLE IF NOT EXISTS auction_items_valid (
+    CREATE TABLE IF NOT EXISTS auction_items (
         id SERIAL PRIMARY KEY,
         source_mongo_id TEXT UNIQUE,
         scan_timestamp TIMESTAMP,
@@ -90,23 +85,6 @@ def create_tables():
         tier TEXT,
         price BIGINT,
         seller TEXT,
-        is_valid BOOLEAN,
-        created_at TIMESTAMP DEFAULT NOW()
-    );
-    """)
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS auction_items_invalid (
-        id SERIAL PRIMARY KEY,
-        source_mongo_id TEXT UNIQUE,
-        scan_timestamp TIMESTAMP,
-        name TEXT,
-        class TEXT,
-        tier TEXT,
-        price BIGINT,
-        seller TEXT,
-        is_valid BOOLEAN,
-        invalid_reason TEXT,
         created_at TIMESTAMP DEFAULT NOW()
     );
     """)

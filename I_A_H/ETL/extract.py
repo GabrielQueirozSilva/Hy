@@ -15,8 +15,4 @@ class Extrator:
     def extrair_dados(self, collection_name=None):
         collection_name = collection_name or os.getenv("MONGO_COLLECTION_NAME")
         collection = self.db[collection_name]
-        documentos = []
-        for doc in collection.find({}):
-            doc["_id"] = str(doc["_id"])
-            documentos.append(doc)
-        return documentos
+        return list(collection.find({}))

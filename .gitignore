@@ -8,3 +8,4 @@ venv/
 detections_divan/
 detections_old/
 .env
+detections_divan_new/

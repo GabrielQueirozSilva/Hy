@@ -1,13 +1,21 @@
 import json
 import os
 from pymongo import MongoClient
-name = "detections_divan"
+import os
+from dotenv import load_dotenv
+import sys
 
+load_dotenv() 
+
+pasta = "detections_divan_new"
 
 class MongoStorage:
-    def __init__(self, uri="mongodb://localhost:27017"):
+    def __init__(self, uri=None, db=None, collection=None):
+        uri = uri or os.getenv("MONGO_URI")
+        db = db or os.getenv("MONGO_DB")
+        collection = collection or os.getenv("MONGO_COLLECTION_NAME")
         self.client = MongoClient(uri)
-        self.col = self.client["hypixel_scans"]["diva_colection"]
+        self.col = self.client[db][collection]
 
     def save(self, document: dict):
         self.col.insert_one(document)
@@ -16,7 +24,7 @@ class MongoStorage:
         self.col.insert_many(documents)
 
 
-def read_all_jsons(folder: str = name) -> list[dict]:
+def read_all_jsons(folder: str = pasta) -> list[dict]:
     all_data = []
     
     for filename in os.listdir(folder):
@@ -30,7 +38,8 @@ def read_all_jsons(folder: str = name) -> list[dict]:
 
 
 def main():
-    data = read_all_jsons()
+    folder = sys.argv[1] if len(sys.argv) > 1 else pasta
+    data = read_all_jsons(folder)
     mongo = MongoStorage()
     mongo.save_many(data)
 

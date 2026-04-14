@@ -241,3 +241,14 @@ Melhorias no parser e estrutural:
 4: criei um arquivo para ler json antigos;
 
 5: criei um requeriments para baixair os pips, futuramente adiconarei no manual como usar tanto o .env como o requeriments;
+
+
+##  **Versão 4 – 12/04/2026**
+
+1: Foi feito a troca da ia usada para indentificar as caixas de informações dos itens;
+
+2: Agora o main faz um barulho ao indentificar e salvar as imagens;
+
+3: Pequenas alterações gerais foram feitas para a melhora do funcionamento geral;
+
+4: O ETL foi grandemente modificado, agora ele não cria mais 2 tabelas no pgadmin, já que não faz sentido isto. Ele mantem os dados do postgress apenas como os validos, botando uma flag diretamente no mongoDB nos dados invalidos, cria agora o campo etl_status que indica se o item ja passou pelo ETL, se ele foi aprovado, esta precisando de melhoras ou é um dado corrompido e não pode ser usado. Agora os dados do PG e do json são imutaveis, os PG em qualidade para uso e o json se mantem para observaçãp, enquanto os dados no mongodb são para armazenamento temporário e melhorias ou exclusão. 

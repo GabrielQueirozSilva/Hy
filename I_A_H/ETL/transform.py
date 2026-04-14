@@ -1,20 +1,30 @@
 from I_A_H.parser.item_parser import parse_item_data
+from dotenv import load_dotenv
 
-def transformar_documento(doc):
-    raw_text = doc.get("raw_text", "")
+load_dotenv() 
+ 
+def transformar_documento(doc, valid, reason, collection):
+    item_data = doc.get("parsed", {})
 
-    item_data, sanitized_text = parse_item_data(raw_text)
+    if valid is True:
+        etl_status = "validated"
+    elif valid is False and reason != "PARSED_MISSING":
+        etl_status = "quarantine"
+    else:
+        etl_status = "rejected"
 
-    if "seller" not in item_data:
-        item_data["seller"] = None
-
-    if "pet_type" not in item_data:
-        item_data["pet_type"] = None
+    collection.update_one(
+        {"_id": doc["_id"]},
+        {"$set": {
+            "etl_status": etl_status,
+            "etl_errors": reason
+        }}
+    )
 
     return {
         "id": str(doc.get("_id")),
         "scan_timestamp": doc.get("scan_timestamp"),
-        "raw_text": raw_text,
-        "sanitized_text": sanitized_text,
+        "raw_text": doc.get("raw_text"),
+        "sanitized_text": doc.get("sanitized_text"),
         "parsed": item_data
     }

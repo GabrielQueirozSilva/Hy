@@ -1,54 +1,45 @@
 from I_A_H.ETL.extract import Extrator
 from I_A_H.ETL.transform import transformar_documento
-from I_A_H.ETL.schemas import (
-    create_database_if_not_exists,
-    create_tables,
-    validar_item
-)
+from I_A_H.ETL.schemas import create_database_if_not_exists, create_tables, validar_item
 from I_A_H.ETL.load import load_data
-
+from pymongo import MongoClient
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 def run():
-
     create_database_if_not_exists()
     create_tables()
 
+    client = MongoClient(os.getenv("MONGO_URI"))
+    db = client[os.getenv("MONGO_DB")]
+    collection = db[os.getenv("MONGO_COLLECTION_NAME")]
+
     extrator = Extrator()
-    documentos_raw = extrator.extrair_dados()
+    documentos_mongo = extrator.extrair_dados()
+    print(f"{len(documentos_mongo)} documentos extraidos do MongoDB")
 
-    print(f"{len(documentos_raw)} documentos extraidos do MongoDB")
+    validados = []
 
-    dados_validos = []
-    dados_invalidos = []
-
-    for doc in documentos_raw:
+    for doc in documentos_mongo:
         try:
-            transformado = transformar_documento(doc)
-
-            is_valid, invalid_reason = validar_item(transformado)
-
-            transformado["is_valid"] = is_valid
-            transformado["invalid_reason"] = invalid_reason
+            is_valid, invalid_reason = validar_item(doc)
+            transformado = transformar_documento(doc, is_valid, invalid_reason, collection)
 
             if is_valid:
-                dados_validos.append(transformado)
-            else:
-                dados_invalidos.append(transformado)
+                validados.append(transformado)
 
         except Exception as e:
             print(f"Erro ao processar documento {doc.get('_id')}: {e}")
 
-    print(f"Registros validos: {len(dados_validos)}")
-    print(f"Registros invalidos: {len(dados_invalidos)}")
+    print(f"Validados: {len(validados)}")
+    print(f"Quarentena/Rejeitados: {len(documentos_mongo) - len(validados)}")
 
-    if dados_validos:
-        load_data(dados_validos, validade=True)
+    if validados:
+        load_data(validados)
 
-    if dados_invalidos:
-        load_data(dados_invalidos, validade=False)
-
+    client.close()
     print("ETL finalizado")
-
 
 if __name__ == "__main__":
     run()

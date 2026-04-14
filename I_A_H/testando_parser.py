@@ -1,16 +1,27 @@
 from pymongo import MongoClient
 import os
 from bson import ObjectId
+import os
+from dotenv import load_dotenv
+import sys
 
 from I_A_H.parser.item_parser import parse_item_data
 
+load_dotenv() 
+
+collection = "heat_collection"
+collection2 = "divan_colection"
+collection3 = "geral_collection"
+
 class Extrator:
     
-    def __init__(self, uri="mongodb://localhost:27017", db_name="hypixel_scans"):
+    def __init__(self, uri=None, db_name=None):
+        uri = uri or os.getenv("MONGO_URI")
+        db_name = db_name or os.getenv("MONGO_DB")
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
 
-    def extrair_dados(self, collection_name="divan_colection"): 
+    def extrair_dados(self, collection_name=collection3): 
         collection = self.db[collection_name]
         documentos = []
 
@@ -23,10 +34,10 @@ class Extrator:
 def individual():
     extrator = Extrator()
     dados_extraidos = extrator.extrair_dados()
-    id = "69b4a62c77225ec96926e582"
-    for dado in dados_extraidos:        
+    id = "69c9b8d4d77aac6fd320cdea"
+    for dado in dados_extraidos: 
         if dado["_id"] == id:
-            os.system('clear || cls')
+            # os.system('clear || cls')
             item_data, sanitized_text = parse_item_data(dado["raw_text"])
             return item_data, dado['parsed'],id,sanitized_text
  
@@ -36,7 +47,7 @@ def completo():
    dados_extraidos = extrator.extrair_dados()
    resultados = []
    for dado in dados_extraidos:
-       os.system('clear || cls')
+    #    os.system('clear || cls')
        item_data, sanitized_text = parse_item_data(dado["raw_text"])
        if item_data != dado['parsed']:
            resultados.append((item_data, dado['parsed'], str(dado["_id"]), sanitized_text))
@@ -56,9 +67,9 @@ if __name__ == "__main__":
         resposta = input().lower()
         if resposta == 's':
             print("Salvando dados modificados...")
-            client = MongoClient("mongodb://localhost:27017")
-            db = client["hypixel_scans"]
-            collection = db["divan_colection"]
+            client = MongoClient(os.getenv("MONGO_URI"))
+            db = client[os.getenv("MONGO_DB")]
+            collection = db[collection]
             filter_query = {"_id": ObjectId(id)}
             update_data = {"$set": {"parsed": new}}
             result = collection.update_one(filter_query, update_data)
@@ -80,9 +91,9 @@ if __name__ == "__main__":
             resposta = input().lower()
             if resposta == 's':
                 print("Salvando dados modificados...")
-                client = MongoClient("mongodb://localhost:27017")
-                db = client["hypixel_scans"]
-                collection = db["divan_colection"]
+                client = MongoClient(os.getenv("MONGO_URI"))
+                db = client[os.getenv("MONGO_DB")]
+                collection = db[collection3]
                 filter_query = {"_id": ObjectId(id)}
                 update_data = {"$set": {"parsed": new}}
                 result = collection.update_one(filter_query, update_data)

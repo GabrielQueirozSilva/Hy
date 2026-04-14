@@ -2,10 +2,9 @@ import psycopg2
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+load_dotenv()
 
-load_dotenv() 
-
-def load_data(registros, validade):
+def load_data(registros):
     try:
         conn = psycopg2.connect(
             host=os.getenv("POSTGRES_HOST"),
@@ -20,60 +19,29 @@ def load_data(registros, validade):
 
     cur = conn.cursor()
 
-    if validade:
-        insert_query = """
-        INSERT INTO auction_items_valid (
-            source_mongo_id,
-            scan_timestamp, 
-            name,
-            class,
-            tier,
-            price,
-            seller,
-            is_valid,
-            created_at
-        )
-        VALUES (
-            %(source_mongo_id)s,
-            %(scan_timestamp)s,
-            %(name)s,
-            %(class)s,
-            %(tier)s,
-            %(price)s,
-            %(seller)s,
-            %(is_valid)s,
-            %(created_at)s
-        )
-        ON CONFLICT (source_mongo_id) DO NOTHING;
-        """
-    else:
-        insert_query = """
-        INSERT INTO auction_items_invalid (
-            source_mongo_id,
-            scan_timestamp,
-            name,
-            class,
-            tier,
-            price,
-            seller,
-            is_valid,
-            invalid_reason,
-            created_at
-        )
-        VALUES (
-            %(source_mongo_id)s,
-            %(scan_timestamp)s,
-            %(name)s,
-            %(class)s,
-            %(tier)s,
-            %(price)s,
-            %(seller)s,
-            %(is_valid)s,
-            %(invalid_reason)s,
-            %(created_at)s
-        )
-        ON CONFLICT (source_mongo_id) DO NOTHING;
-        """
+    insert_query = """
+    INSERT INTO auction_items (
+        source_mongo_id,
+        scan_timestamp,
+        name,
+        class,
+        tier,
+        price,
+        seller,
+        created_at
+    )
+    VALUES (
+        %(source_mongo_id)s,
+        %(scan_timestamp)s,
+        %(name)s,
+        %(class)s,
+        %(tier)s,
+        %(price)s,
+        %(seller)s,
+        %(created_at)s
+    )
+    ON CONFLICT (source_mongo_id) DO NOTHING;
+    """
 
     for item in registros:
         cur.execute(insert_query, {
@@ -84,13 +52,10 @@ def load_data(registros, validade):
             "tier": item["parsed"].get("tier"),
             "price": item["parsed"].get("price"),
             "seller": item["parsed"].get("seller"),
-            "is_valid": item.get("is_valid", True),
-            "invalid_reason": item.get("invalid_reason"),
             "created_at": datetime.utcnow()
         })
 
     conn.commit()
     cur.close()
     conn.close()
-
     print(f"{len(registros)} registros carregados no PostgreSQL")

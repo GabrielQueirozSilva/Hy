@@ -3,3 +3,9 @@ pymongo
 keyboard
 psycopg2
 python-dotenv
+
+#parte responsavel pelo main
+opencv-python
+Pillow
+easyocr
+ultralytics
