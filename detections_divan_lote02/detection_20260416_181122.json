@@ -1,0 +1,15 @@
+{
+  "scan_timestamp": "20260416_181122",
+  "raw_text": "Jluuluululuul\nDinensional Boots Divan\nHealth;\nDefens +X5\nMinino 120 (+40}\nMinino OlTune\neSstanI\nMinino Hisdon {+2)\n[eINAT\nOroltl\nOrants+75 Health\nprot\nInants Defense:\nDinensiona Donus\nTitanium gnants +10 Nithril\nFAaet WNen Mne\nRequir the Mountain Tien\nEgehmarT BOOTS\nSellen: [MVP+] Tuistedanesk\n39900,000 coins\nEnds 13d\nClick inspech\nection",
+  "sanitized_text": "jluuluululuul\ndinensional boots divan\nhealth:\ndefens +x5\nminino 120 (+40}\nminino oltune\nesstani\nminino hisdon {+2)\n[einat\noroltl\ngrants+75 health\ninants defense:\ndinensiona donus\ntitanium gnants +10 nithril\nfaaet wnen mne\nrequir the mountain tien\negehmart boots\nsellen: [mvp+] tuistedanesk\n39900000 coins\nends 13d\nclick inspech\nection",
+  "parsed": {
+    "name": "jluuluululuul"
+  },
+  "bbox": [
+    922,
+    484,
+    1155,
+    791
+  ],
+  "confidence": 0.92264324426651
+}

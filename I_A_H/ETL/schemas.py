@@ -4,16 +4,22 @@ import os
 
 load_dotenv() 
 
-#LEMBRA DE MUDAR O NOME DOS BANCOS DE DADOS
+# TODO: LEMBRA DE MUDAR O NOME DOS BANCOS DE DADOS
+
+#Arquivo responsavel por definir se os dados são validos ou não e caso não sejam, retornar
+# o motivo da invalides. Ele retorna um Bool e str/None
 
 def validar_item(item: dict) -> tuple[bool, str | None]:
+    #ele funciona principalmente pela parte do parsed que existe no dados, no caso
+    #de estiver faltando algo, o código indentifica e retorna o motivo da invalidez para
+    #a eventual verificação
     parsed = item.get("parsed")
 
     if not isinstance(parsed, dict):
-        return False, "PARSED_MISSING"
+        return False, "PARSED_INVALID"
     
     if parsed.get("name") is None:
-        return False, "NAME_MISSING"
+        return False, "NAME_INVALID"
         
     if parsed.get("class") is None:
         return False, "CLASS_INVALID"
@@ -30,6 +36,8 @@ def validar_item(item: dict) -> tuple[bool, str | None]:
 
 
 def create_database_if_not_exists():
+    #verifica se existe uma base de dados e depois
+    #cria uma base de dados no posgress caso não tenha sido feita nenhuma
     try:
         conn = psycopg2.connect(
             host=os.getenv("POSTGRES_HOST"),
@@ -44,7 +52,7 @@ def create_database_if_not_exists():
 
         return
     
-    conn.autocommit = True #PRECISA POR ISSO PARA DESLIGAR AS TRANSAÇÕES AUTOMATICAMENTE
+    conn.autocommit = True 
     
     cur = conn.cursor()
 
@@ -54,14 +62,15 @@ def create_database_if_not_exists():
     if not exists:
         cur.execute("CREATE DATABASE %s;",(os.getenv("POSTGRES_DB"),))
         print(" Banco criado")
-    else:
-        pass
 
     conn.commit()
     cur.close()
     conn.close()
 
 def create_tables():
+    # Cria a tabela auction_items no postgres caso ela não exista.
+    # Ela armazena os dados principais dos itens escaneados, sendo eles:
+    # id, source_mongo_id, scan_timestamp, name, class, tier, price, seller, created_at
     try:
         conn = psycopg2.connect(
             host=os.getenv("POSTGRES_HOST"),

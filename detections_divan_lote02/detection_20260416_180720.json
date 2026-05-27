@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_180720",
+  "raw_text": "Leggingsof Divan\nHealth: +130\nDefense:+170\nMining Speed: +80\nMining Fortune:+30\nHeat Resistance:+10\n[7] [#][7] [A][o]\nThis iten can be reforgedi\nRequires Heant of Mountain Tier\nLEGENdaRT LEGGINGS\nSeller [MVP ] Zial\nBuy it nou: 23,999,999 coins\nEnds in: @6h 3n 46s\nClick to inspect\nthe",
+  "sanitized_text": "leggings of divan\nhealth: +130\ndefense:+170\nmining speed: +80\nmining fortune:+30\nheat resistance:+10\n[7] [#][7] [a][o]\nthis item can be reforgedi\nrequires heant of mountain tier\nlegendary leggings\nseller:[mpv] zial\nbuy it now: 23999999 coins\nends in: @6h 3n 46s\nclick to inspect",
+  "parsed": {
+    "name": "leggings of divan",
+    "tier": "legendary",
+    "seller": "zial",
+    "price": 23999999,
+    "class": "Equipment"
+  },
+  "bbox": [
+    933,
+    348,
+    1383,
+    746
+  ],
+  "confidence": 0.9404082298278809
+}

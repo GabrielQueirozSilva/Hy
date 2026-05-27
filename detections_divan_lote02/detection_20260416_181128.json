@@ -1,0 +1,18 @@
+{
+  "scan_timestamp": "20260416_181128",
+  "raw_text": "Jaded DootsOt Divan\nVepth Strider III\nHealth: Le=\nDefense:+130\nHinina Opeed +197 {+43} (+2>\nHinina ontune; {+2o}\nHeat Resistance\nLAJLA LML ]\nVepth Otniget\nReduces hou nuch Youane sloued\ntne Waten L00/\neathen Fauina\nIncreases how hiah Hou can fall\nbeton taking tal danage by and\nreduces danade\nDrowth\nDrants Health\nFrotection\nrants Defense:\nRequit the Mountain Tier\nEoehwnnt BOOTS\nSellen: Bnennenderbauni\nnou: 39,999000 coins\nEnds in: 40h\nClick Inspecty\nVr",
+  "sanitized_text": "jaded dootsot divan\nvepth strider iii\nhealth: le=\ndefense:+130\nhinina opeed +197 {+43} (+2>\nhinina ontune: {+2o}\nheat resistance\nlajla lml ]\nvepth otniget\nreduces hou nuch youane sloued\ntne waten l00/\neathen fauina\nincreases how hiah hou can fall\nbeton taking tal danage by and\nreduces danade\ndrowth\ndrants health\nfrotection\nrants defense:\nrequit the mountain tier\neoehwnnt boots\nseller:: bnennenderbauni\nnow: 39999000 coins\nends in: 40h\nclick inspecty",
+  "parsed": {
+    "name": "jaded dootsot divan",
+    "tier": "legendary",
+    "seller": "bnennenderbauni",
+    "price": 39999000
+  },
+  "bbox": [
+    936,
+    486,
+    1172,
+    811
+  ],
+  "confidence": 0.9483554363250732
+}

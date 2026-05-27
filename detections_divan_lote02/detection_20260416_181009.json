@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_181009",
+  "raw_text": "Boots of Divan\nHealth: +80\nDefense:+110\nMining Speed:+80\nMining Fortune:+30\nHeat Resistance:+10\n[7] [9][7][e][~]\nThis iten can refongedi\nRequires Heant of the Mountain Tien 6.\nLEgEndarT bootS\nSeller- [MVP++] soanika\nBuy it nou: 23900,000 coins\nEnds in: 46h\nClick to inspect\nbe",
+  "sanitized_text": "boots of divan\nhealth: +80\ndefense:+110\nmining speed:+80\nmining fortune:+30\nheat resistance:+10\n[7] [9][7][e][~]\nthis item can refongedi\nrequires heant of the mountain tien 6.\nlegendary boots\nseller: [mvp++] soanika\nbuy it now: 23900000 coins\nends in: 46h\nclick to inspect",
+  "parsed": {
+    "name": "boots of divan",
+    "tier": "legendary",
+    "seller": "[mvp++] soanika",
+    "price": 23900000,
+    "class": "Equipment"
+  },
+  "bbox": [
+    893,
+    372,
+    1351,
+    772
+  ],
+  "confidence": 0.9327669143676758
+}

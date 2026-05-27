@@ -1,0 +1,18 @@
+{
+  "scan_timestamp": "20260416_181057",
+  "raw_text": "Jaded Doots Divan\nVepth Strider III\nHealth\nVetense Ae\nlining Speed: +123 {+43}\nHinina ontune; {+2o}\nHeat Resistance\nLAJLA LMu Lo]\nVepth Otniden I\nReducesnoW Much You ane sloued\ntne Watet L00/\neathet auina\nIncreases niah Hou can fall\nbefone taking fall danage and\nejuce danade by 25X\nDrowth\nrants Health\nFrotection\nants Defense:\nThonns I\nrants 50% chance reboung\ndanage dealt back the attacken\nRequit Neat Mountain Tier\nEgEndary boOTS\nSellen: Dondet\nnow: 33,730,000 coins\nEnds in: 13d\nClick Inspecty",
+  "sanitized_text": "jaded doots divan\nvepth strider iii\nhealth\nvetense ae\nlining speed: +123 {+43}\nhinina ontune: {+2o}\nheat resistance\nlajla lmu lo]\nvepth otniden i\nreducesnow much you ane sloued\ntne watet l00/\neathet auina\nincreases niah hou can fall\nbefone taking fall danage and\nejuce danade by 25x\ndrowth\nrants health\nfrotection\nants defense:\nthonns i\nrants 50% chance reboung\ndanage dealt back the attacken\nrequit neat mountain tier\negendary boots\nseller:: dondet\nnow: 33730000 coins\nends in: 13d\nclick inspecty",
+  "parsed": {
+    "name": "jaded doots divan",
+    "tier": "legendary",
+    "seller": "dondet",
+    "price": 33730000
+  },
+  "bbox": [
+    957,
+    467,
+    1184,
+    822
+  ],
+  "confidence": 0.958527147769928
+}

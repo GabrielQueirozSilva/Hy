@@ -3,8 +3,12 @@ from datetime import datetime
 from dotenv import load_dotenv
 import os
 load_dotenv()
+#Aqui ele carrega os dados carregados do mongodb no postgress, ele não chama o mongodb
+#pois o progama somente pega os dados carregados localmente pelo extract.py e joga no mongo
 
 def load_data(registros):
+    #Essa função funciona da seguinte forma:
+    #Primeiramente ela tenta conectar com o postgres
     try:
         conn = psycopg2.connect(
             host=os.getenv("POSTGRES_HOST"),
@@ -17,6 +21,8 @@ def load_data(registros):
         print(repr(e))
         return
 
+    #ao conectar ele prepara os comandos de inserção para adicionar os novos dados, definindo
+    # quais dados seram adicionados
     cur = conn.cursor()
 
     insert_query = """
@@ -42,7 +48,14 @@ def load_data(registros):
     )
     ON CONFLICT (source_mongo_id) DO NOTHING;
     """
+    #esse on conflict serve para não inserir dados repetidos
+    
+    #essas váriaveis servem para contar quantos dados foram adicionados(inserted)
+    #e quantos foram pulado (skipped)
+    inserted = 0
+    skipped = 0
 
+    #loop responsavel pela execução da query definida anteriormente e contagem das váriaveis
     for item in registros:
         cur.execute(insert_query, {
             "source_mongo_id": item["id"],
@@ -54,8 +67,13 @@ def load_data(registros):
             "seller": item["parsed"].get("seller"),
             "created_at": datetime.utcnow()
         })
+        if cur.rowcount == 1:
+            inserted += 1
+        else:
+            skipped += 1
 
+    #fechamento da conexão e emissão das informações no terminal
     conn.commit()
     cur.close()
     conn.close()
-    print(f"{len(registros)} registros carregados no PostgreSQL")
+    print(f"{inserted} registros inseridos | {skipped} já existiam (ignorados)")

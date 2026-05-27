@@ -14,4 +14,4 @@ def save_json(document: dict, folder="detections_divan_new"):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(json_safe, f, ensure_ascii=False, indent=2)
 
-    print(f"💾 JSON salvo: {path}")
+    print(f"JSON salvo: {path}")

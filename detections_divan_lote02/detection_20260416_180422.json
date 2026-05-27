@@ -1,0 +1,18 @@
+{
+  "scan_timestamp": "20260416_180422",
+  "raw_text": "YIxIYIA\nChestplate of Divan\nHealth: 200\nDefense:+130\nMining Speed: +80\nMining Fortune: +30\nHeat Resistance:+10\n[Z] [9][A] [M][Y]\nThis iten can be reforgedi\nRequires Heant of Mountain Tier 6.\nHTTHIC CHESTPLATE &\nSeller: [MVP+]kvilee\nBuy it nou: 41,900,000 coins\nEnds in: 12d\nClick to inspect\nthe",
+  "sanitized_text": "yixiyia\nchestplate of divan\nhealth: 200\ndefense:+130\nmining speed: +80\nmining fortune: +30\nheat resistance:+10\n[z] [9][a] [m][y]\nthis item can be reforgedi\nrequires heant of mountain tier 6.\nhtthic chestplate &\nseller: [mvp+]kvilee\nbuy it now: 41900000 coins\nends in: 12d\nclick to inspect",
+  "parsed": {
+    "name": "yixiyia",
+    "tier": "mythic",
+    "seller": "[mvp+]kvilee",
+    "price": 41900000
+  },
+  "bbox": [
+    882,
+    412,
+    1331,
+    823
+  ],
+  "confidence": 0.9198518991470337
+}

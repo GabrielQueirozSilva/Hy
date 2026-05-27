@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_180325",
+  "raw_text": "Chestplate of Divan\nHealth: 200\nDefense:+130\nMining Speed:+80\nMining Fortune: +30\nHeat Resistance:+10\n[7] [x][ ][A][Y]\nThis iten can be refongedi\nRequires Heantof the Mountain Tier 6.\nLEgENdart CHESTPLATE\nSeller: [VIP] @RapidFire\nBuy it nou: 34000,000 coins\nEnds in: 45h\nClick to inspect",
+  "sanitized_text": "chestplate of divan\nhealth: 200\ndefense:+130\nmining speed:+80\nmining fortune: +30\nheat resistance:+10\n[7] [x][ ][a][y]\nthis item can be refongedi\nrequires heantof the mountain tier 6.\nlegendary chestplate\nseller: [vip] @rapidfire\nbuy it now: 34000000 coins\nends in: 45h\nclick to inspect",
+  "parsed": {
+    "name": "chestplate of divan",
+    "tier": "legendary",
+    "seller": "[vip] @rapidfire",
+    "price": 34000000,
+    "class": "Equipment"
+  },
+  "bbox": [
+    984,
+    347,
+    1429,
+    748
+  ],
+  "confidence": 0.9453065991401672
+}

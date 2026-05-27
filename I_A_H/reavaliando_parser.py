@@ -11,7 +11,7 @@ load_dotenv()
 
 collection = "heat_collection"
 collection2 = "divan_colection"
-collection3 = "geral_collection"
+collection3 = "divan_collection_lote01" #"geral_collection"
 
 class Extrator:
     
@@ -48,9 +48,11 @@ def completo():
    resultados = []
    for dado in dados_extraidos:
     #    os.system('clear || cls')
-       item_data, sanitized_text = parse_item_data(dado["raw_text"])
-       if item_data != dado['parsed']:
-           resultados.append((item_data, dado['parsed'], str(dado["_id"]), sanitized_text))
+       if dado["etl_status"] == "quarantine":
+            item_data, sanitized_text = parse_item_data(dado["raw_text"])
+            if item_data != dado['parsed']:
+                resultados.append((item_data, dado['parsed'], str(dado["_id"]), sanitized_text))
+   
    return resultados
 
 if __name__ == "__main__":

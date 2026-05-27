@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_181116",
+  "raw_text": "Jaded Boots of Divan\nHealth: LiEE\nDefenss +130\nNining Opeed Ai2N +43,\nMining Fortune: 55 (+25}\nResistance\n[A]V][A][o]\nOrouth\nOrants Heath\nFrotection\nOrants Detense\nFAit the Mountain Tier\nEgENdary boOTS\nSeller: Elit Ternaton\n38000000 coins\nEnds in: 5d\nClick to inspect",
+  "sanitized_text": "jaded boots of divan\nhealth: liee\ndefenss +130\nmining opeed ai2n +43\nmining fortune: 55 (+25}\nresistance\n[a]v][a][o]\norouth\ngrants heath\nfrotection\ngrants detense\nfait the mountain tier\negendary boots\nseller: elit ternaton\n38000000 coins\nends in: 5d\nclick to inspect",
+  "parsed": {
+    "name": "jaded boots of divan",
+    "tier": "legendary",
+    "seller": "elit ternaton",
+    "price": null,
+    "class": "Equipment"
+  },
+  "bbox": [
+    1014,
+    467,
+    1236,
+    709
+  ],
+  "confidence": 0.9476855397224426
+}

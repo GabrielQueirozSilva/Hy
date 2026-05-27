@@ -7,7 +7,7 @@ import sys
 
 load_dotenv() 
 
-pasta = "detections_divan_new"
+pasta = "detections_divan_lote02"
 
 class MongoStorage:
     def __init__(self, uri=None, db=None, collection=None):

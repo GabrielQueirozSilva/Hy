@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_180050",
+  "raw_text": "Helmet of Divan\nHealth: +100\nDefense:+130\nMining Speed: +80\nMining Fortune:+30\nHeat Resistance:+10\n[7] [9][Z] [e][o]\nThis iten can be reforgedi\nRequires Heantof the Mountain Tien 6.\nLEgEnarT HELHET\nSeller: [MVP 1 Zial\nBuy it nou: 26,389,999 coins\nEnds in: 43h\nClick to inspect",
+  "sanitized_text": "helmet of divan\nhealth: +100\ndefense:+130\nmining speed: +80\nmining fortune:+30\nheat resistance:+10\n[7] [9][z] [e][o]\nthis item can be reforgedi\nrequires heantof the mountain tien 6.\nlegendary helhet\nseller: [mvp 1 zial\nbuy it now: 26389999 coins\nends in: 43h\nclick to inspect",
+  "parsed": {
+    "name": "helmet of divan",
+    "tier": "legendary",
+    "seller": "[mvp 1 zial",
+    "price": 26389999,
+    "class": "Equipment"
+  },
+  "bbox": [
+    889,
+    462,
+    1334,
+    858
+  ],
+  "confidence": 0.9153349995613098
+}

@@ -252,3 +252,16 @@ Melhorias no parser e estrutural:
 3: Pequenas alterações gerais foram feitas para a melhora do funcionamento geral;
 
 4: O ETL foi grandemente modificado, agora ele não cria mais 2 tabelas no pgadmin, já que não faz sentido isto. Ele mantem os dados do postgress apenas como os validos, botando uma flag diretamente no mongoDB nos dados invalidos, cria agora o campo etl_status que indica se o item ja passou pelo ETL, se ele foi aprovado, esta precisando de melhoras ou é um dado corrompido e não pode ser usado. Agora os dados do PG e do json são imutaveis, os PG em qualidade para uso e o json se mantem para observaçãp, enquanto os dados no mongodb são para armazenamento temporário e melhorias ou exclusão. 
+
+
+
+
+
+
+##  **Versão 4.1 27/05/2026**
+1: Padronização do etl_erros
+2: especificação dos registros inseridos ou ja existentes
+3: pequena adição nas constantes
+4: melhoria no testando_parser para verificar apenas os em quarantine no caso completo; modificado o nome para reavaliando_parser
+5: pequenas otimizações no ETL
+6: Documentação geral do ETL

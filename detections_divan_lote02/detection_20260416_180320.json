@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_180320",
+  "raw_text": "ChestplateOf Divan\nHealth: 200\nDefense:+130\nMining Speed:+80\nMining Fontune:+30\nHeat Resistance:+10\n[7] [9][ ][A][X]\nThis iten can be reforgedi\nRequires Heant of the Mountain Tien\nLEgendart CHESTPLATE\nSeller- [VIP] ORapidFire\nBuy it nou: 34000,000 coins\nEnds in: 45h\nClick to inspect",
+  "sanitized_text": "chestplateof divan\nhealth: 200\ndefense:+130\nmining speed:+80\nmining fontune:+30\nheat resistance:+10\n[7] [9][ ][a][x]\nthis item can be reforgedi\nrequires heant of the mountain tien\nlegendary chestplate\nseller: [vip] orapidfire\nbuy it now: 34000000 coins\nends in: 45h\nclick to inspect",
+  "parsed": {
+    "name": "chestplateof divan",
+    "tier": "legendary",
+    "seller": "[vip] orapidfire",
+    "price": 34000000,
+    "class": "Equipment"
+  },
+  "bbox": [
+    967,
+    343,
+    1423,
+    747
+  ],
+  "confidence": 0.9190041422843933
+}

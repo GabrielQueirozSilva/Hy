@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_180355",
+  "raw_text": "Jaded Chestplate of Divan\nHealth: +275\nDefense:+150\nMining Speed:+125(+45}\nMining Fontune:+55(+25}\nHeat Resistance:+10\n[7] [x][ ][A][X]\nOrouth\nOrants+75 Health:\nProtectionV\nOrants+20 Defense\nThorns III\nOrants a 50%, chance to rebound 9X\nof danage dealt backat the attacken\nRequires Heant of the Mountain Tien\nLEgENdart CHESTPLATE\nSeller- Border_ Rex\nBuy it nou: 36,730000 coins\nEnds in: 13d\nClick to inspect",
+  "sanitized_text": "jaded chestplate of divan\nhealth: +275\ndefense:+150\nmining speed:+125(+45}\nmining fontune:+55(+25}\nheat resistance:+10\n[7] [x][ ][a][x]\norouth\ngrants+75 health:\nprotectionv\ngrants+20 defense\nthorns iii\ngrants a 50% chance to rebound 9x\nof danage dealt backat the attacken\nrequires heant of the mountain tien\nlegendary chestplate\nseller: border_ rex\nbuy it now: 36730000 coins\nends in: 13d\nclick to inspect",
+  "parsed": {
+    "name": "jaded chestplate of divan",
+    "tier": "legendary",
+    "seller": "border_ rex",
+    "price": 36730000,
+    "class": "Equipment"
+  },
+  "bbox": [
+    951,
+    385,
+    1407,
+    924
+  ],
+  "confidence": 0.9472094178199768
+}

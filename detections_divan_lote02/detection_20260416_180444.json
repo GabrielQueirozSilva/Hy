@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_180444",
+  "raw_text": "Jaded Chestplate of Divan\nHealth: 200\nDefense:+130\nMining Speed:+125 (+45}\nPristine+04(+04}\nMining Fortune:+55(+25}\nHeat Resistance:+10\n[7] [A][Z] [A]o]\nRequires Heantof Mountain Tier\nLEgENdart CHESTPLATE\nSellen: [MVP+] NotMegaBlaster\nBuy it nou: 48,838838 coins\nEnds in; 8d\nClick to inspect\nthe",
+  "sanitized_text": "jaded chestplate of divan\nhealth: 200\ndefense:+130\nmining speed:+125 (+45}\npristine+04(+04}\nmining fortune:+55(+25}\nheat resistance:+10\n[7] [a][z] [a]o]\nrequires heantof mountain tier\nlegendary chestplate\nseller:: [mvp+] notmegablaster\nbuy it now: 48838838 coins\nends in: 8d\nclick to inspect",
+  "parsed": {
+    "name": "jaded chestplate of divan",
+    "tier": "legendary",
+    "seller": "[mvp+] notmegablaster",
+    "price": 48838838,
+    "class": "Equipment"
+  },
+  "bbox": [
+    1038,
+    420,
+    1496,
+    825
+  ],
+  "confidence": 0.9228994846343994
+}

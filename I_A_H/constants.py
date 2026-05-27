@@ -39,10 +39,10 @@ GLOBAL_REPLACEMENTS = {
     "(nining": "Mining", "Nining": "Mining", "Miming": "Mining", "INining": "Mining", "IMining": "Mining",
     ";": ":",
 }
-
+#jaded dootsot divan
 NAMES_REPLACEMENTS = {
-    "Leggingsof": "leggings of",
-    "BootsOf": "boots of", "dootsof": "boots of", "dootsf": "boots of",
+    "Leggingsof": "leggings of",  
+    "BootsOf": "boots of", "dootsof": "boots of", "dootsf": "boots of", "Doots": "boots", "DootsOt": "boots of",
     "Meat": "Heat",
     "HegenonyAntiface": "Hegemony Artifact", "Antifact": "Artifact",
     "Helnet": "Helmet", "HELHET": "Helmet", "helret": "Helmet",
@@ -59,6 +59,7 @@ NAMES_REPLACEMENTS = {
 SELLER_REPLACEMENTS = {
     "sellen-": "seller:", "seller-": "seller:", "seller=": "seller:", "sellen": "seller:", 
     "seller ": "seller:", "sellen:": "seller:", "jeller:": "seller:", "sellern:": "seller:",
+    "eller-": "seller:",
     
     "[mvp ]": "[MPV]", 
     "[vip+ ": "[VIP+]",

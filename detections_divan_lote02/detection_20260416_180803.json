@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_180803",
+  "raw_text": "Leggingsof Divan\nHealth: +205\nDefense_ +190\nMining Speed:+80\nMining Fortune:\n+30\nHeat Resistance:+10\n[7] [A][Z] [A][~]\nOrouth\nOrants+75 Health\nProtection\nOrants+20 Defense_\nThorns III\nOrants 50},chance torebound 9X\nof danage dealt backat the attacken\nThis iten can be refongedi\nRequires Heantof the Mountain\nLEgENdart LEGGINGS\nSeller: [VIP] Opamer5432\nBuy it nou: 24800000 coins\nEnds in: l0d\nClick to inspect\nTier",
+  "sanitized_text": "leggings of divan\nhealth: +205\ndefense +190\nmining speed:+80\nmining fortune:\nheat resistance:+10\n[7] [a][z] [a][~]\norouth\ngrants+75 health\nprotection\ngrants+20 defense\nthorns iii\ngrants 50}chance torebound 9x\nof danage dealt backat the attacken\nthis item can be refongedi\nrequires heantof the mountain\nlegendary leggings\nseller: [vip] opamer5432\nbuy it now: 24800000 coins\nends in: l0d\nclick to inspect",
+  "parsed": {
+    "name": "leggings of divan",
+    "tier": "legendary",
+    "seller": "[vip] opamer5432",
+    "price": 24800000,
+    "class": "Equipment"
+  },
+  "bbox": [
+    916,
+    357,
+    1380,
+    943
+  ],
+  "confidence": 0.9282274842262268
+}

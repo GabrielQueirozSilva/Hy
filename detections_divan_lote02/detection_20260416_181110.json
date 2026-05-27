@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_181110",
+  "raw_text": "Dinensional Boots of Wivan\nVepth OtnIder I\nHealth Le=\nVetense +136\nHinina Speed:+156 (+40} +36}\nHinina Fontune;\nHeat Resistance\ninina Nisgon:\n[A][Q]\nVepth Otniget\nReducesnoW Much sloweo\ntne Watet L00/\neathet auina\nIncreases niah Hou\nDetone taking taw danage and\nreduces danade\nDrowth\nDrants Health\nFrotection\nrants Defense:\nDinensional Bonus\nTitaniun Ore grants +10 Nithril\noWget Wnen Nined:\nRequit the Mountain Tier\nEgENdary BOOTS\nSeller: [VIP S4EK\nnou; 37000,000 coins\nEnds in: 13d\nClick Inspecty",
+  "sanitized_text": "dinensional boots of wivan\nvepth otnider i\nhealth le=\nvetense +136\nhinina speed:+156 (+40} +36}\nhinina fontune:\nheat resistance\ninina nisgon:\n[a][q]\nvepth otniget\nreducesnow much sloweo\ntne watet l00/\neathet auina\nincreases niah hou\ndetone taking taw danage and\nreduces danade\ndrowth\ndrants health\nfrotection\nrants defense:\ndinensional bonus\ntitaniun ore grants +10 nithril\nowget wnen nined:\nrequit the mountain tier\negendary boots\nseller: [vip 54ek\nnow: 37000000 coins\nends in: 13d\nclick inspecty",
+  "parsed": {
+    "name": "dinensional boots of wivan",
+    "tier": "legendary",
+    "seller": "[vip 54ek",
+    "price": 37000000,
+    "class": "Equipment"
+  },
+  "bbox": [
+    993,
+    467,
+    1225,
+    844
+  ],
+  "confidence": 0.9367456436157227
+}

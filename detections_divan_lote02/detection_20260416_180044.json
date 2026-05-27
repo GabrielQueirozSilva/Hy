@@ -1,0 +1,19 @@
+{
+  "scan_timestamp": "20260416_180044",
+  "raw_text": "Helmet of Divan\nHealth: 100\nDefense:+130\nMining Speed:+80\nMining Fortune: +30\nHeat Resistance:+10\n[7] [A][A][A][Y]\nThis iten can be refongedi\nRequiresHeantOf the Mountain\nLEgENdart HELHET\nSeller: [VIP] 24225\nBuy it nou: 26,257000 coins\nEnds in: 44h\nClick to inspect\nTier",
+  "sanitized_text": "helmet of divan\nhealth: 100\ndefense:+130\nmining speed:+80\nmining fortune: +30\nheat resistance:+10\n[7] [a][a][a][y]\nthis item can be refongedi\nrequiresheantof the mountain\nlegendary helhet\nseller: [vip] 24225\nbuy it now: 26257000 coins\nends in: 44h\nclick to inspect",
+  "parsed": {
+    "name": "helmet of divan",
+    "tier": "legendary",
+    "seller": "[vip] 24225",
+    "price": 26257000,
+    "class": "Equipment"
+  },
+  "bbox": [
+    1076,
+    397,
+    1524,
+    804
+  ],
+  "confidence": 0.9574849605560303
+}
