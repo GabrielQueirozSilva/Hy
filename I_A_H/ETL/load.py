@@ -1,14 +1,32 @@
+"""
+ETL - Load
+===================
+
+Parte responsável por carregar os dados transformados para o banco de dados postgres, evitando a inscrição de dados duplicados.
+
+Routine List
+------------
+load_data
+    Função principal para carregar os dados transformados para o banco de dados postgres.
+    
+Notes
+-----
+O programa não chama o mongodb diretamente, ele somente pega os dados carregados localmente pelo extract.py e joga no postgres.
+"""
 import psycopg2
 from datetime import datetime
 from dotenv import load_dotenv
 import os
 load_dotenv()
-#Aqui ele carrega os dados carregados do mongodb no postgress, ele não chama o mongodb
-#pois o progama somente pega os dados carregados localmente pelo extract.py e joga no mongo
 
 def load_data(registros):
-    #Essa função funciona da seguinte forma:
-    #Primeiramente ela tenta conectar com o postgres
+    """Função principal para carregar os dados transformados para o banco de dados postgres.
+    
+    Parameters
+    ----------
+    registros: list
+        Uma lista de dicionários contendo os dados transformados, prontos para serem carregados no banco de dados postgres.
+    """
     try:
         conn = psycopg2.connect(
             host=os.getenv("POSTGRES_HOST"),
@@ -20,9 +38,6 @@ def load_data(registros):
         print(f"Erro ao conectar ao banco de dados: {e}")
         print(repr(e))
         return
-
-    #ao conectar ele prepara os comandos de inserção para adicionar os novos dados, definindo
-    # quais dados seram adicionados
     cur = conn.cursor()
 
     insert_query = """
@@ -48,14 +63,10 @@ def load_data(registros):
     )
     ON CONFLICT (source_mongo_id) DO NOTHING;
     """
-    #esse on conflict serve para não inserir dados repetidos
-    
-    #essas váriaveis servem para contar quantos dados foram adicionados(inserted)
-    #e quantos foram pulado (skipped)
+    #ON CONFLICT evita a inscrição de dados duplicados.
     inserted = 0
     skipped = 0
-
-    #loop responsavel pela execução da query definida anteriormente e contagem das váriaveis
+    #inserted e skipped são variáveis para contar quantos registros foram inseridos e quantos já existiam (ignorados).
     for item in registros:
         cur.execute(insert_query, {
             "source_mongo_id": item["id"],
@@ -71,8 +82,6 @@ def load_data(registros):
             inserted += 1
         else:
             skipped += 1
-
-    #fechamento da conexão e emissão das informações no terminal
     conn.commit()
     cur.close()
     conn.close()

@@ -1,3 +1,21 @@
+"""
+ETL - Schemas
+=============
+
+Parte responsável por definir as funções de validação dos dados extraídos do mongodb, além de criar a base de 
+dados e as tabelas necessárias no postgres para o armazenamento dos dados transformados.
+
+Routine List
+------------
+validar_item
+    Função responsável por validar os dados extraídos do mongodb, retornando um Bool indicando a validade 
+    dos dados e uma string indicando o motivo da invalidez, caso os dados sejam considerados inválidos.
+create_database_if_not_exists
+    Função responsável por criar a base de dados no postgres caso ela não exista.
+create_tables
+    Função responsável por criar as tabelas necessárias no postgres caso elas não existam.
+"""
+
 import psycopg2
 from dotenv import load_dotenv
 import os
@@ -6,13 +24,24 @@ load_dotenv()
 
 # TODO: LEMBRA DE MUDAR O NOME DOS BANCOS DE DADOS
 
-#Arquivo responsavel por definir se os dados são validos ou não e caso não sejam, retornar
-# o motivo da invalides. Ele retorna um Bool e str/None
-
 def validar_item(item: dict) -> tuple[bool, str | None]:
-    #ele funciona principalmente pela parte do parsed que existe no dados, no caso
-    #de estiver faltando algo, o código indentifica e retorna o motivo da invalidez para
-    #a eventual verificação
+    """Função responsável por validar os dados extraídos do mongodb.
+    
+    Parameters
+    ----------
+    item: dict
+        O item extraído do mongodb a ser validado.
+    
+    Returns
+    -------
+    tuple: bool, str | None
+        Uma tupla contendo um Bool indicando a validade dos dados e uma string indicando o motivo da invalidez,
+        caso os dados sejam considerados inválidos. Caso os dados sejam considerados válidos, a string será None.
+    
+    Notes
+    -----
+    Funciona principalmente usando o parsed nos dados, caso estiver faltando, já é considerado invalido
+    """
     parsed = item.get("parsed")
 
     if not isinstance(parsed, dict):
@@ -36,8 +65,8 @@ def validar_item(item: dict) -> tuple[bool, str | None]:
 
 
 def create_database_if_not_exists():
-    #verifica se existe uma base de dados e depois
-    #cria uma base de dados no posgress caso não tenha sido feita nenhuma
+    """Função responsável por criar a base de dados no postgres caso ela não exista.
+    """
     try:
         conn = psycopg2.connect(
             host=os.getenv("POSTGRES_HOST"),
@@ -68,9 +97,12 @@ def create_database_if_not_exists():
     conn.close()
 
 def create_tables():
-    # Cria a tabela auction_items no postgres caso ela não exista.
-    # Ela armazena os dados principais dos itens escaneados, sendo eles:
-    # id, source_mongo_id, scan_timestamp, name, class, tier, price, seller, created_at
+    """Função responsável por criar as tabelas necessárias no postgres caso elas não existam.
+    
+    Notes
+    -----
+    Ela armazena os dados principais do item.
+    """
     try:
         conn = psycopg2.connect(
             host=os.getenv("POSTGRES_HOST"),
