@@ -2,8 +2,9 @@
 Modulo responsável por refinar os texto identificado e remover erros comuns
 ============================================================================
 
-Esse modulo é o responsável por refinar o texto identificado e digitalizado pelo OCR, ele funciona com a ajuda do constants.py e é utilizado sempre como função secundária.
-Ele é necessário pois a fonte original do texto ocasiona muitos erros de indentificação nas palavras e ele corrige tanto momentos específicos, quanto o texto como um todo.
+Esse modulo é o responsável por refinar o texto identificado e digitalizado pelo OCR, ele funciona com a ajuda do 
+constants.py e é utilizado sempre como função secundária. Ele é necessário pois a fonte original do texto ocasiona 
+muitos erros de indentificação nas palavras e ele corrige tanto momentos específicos, quanto o texto como um todo.
 
 Routine List
 ------------

@@ -260,20 +260,32 @@ Melhorias no parser e estrutural:
 
 ##  **Versão 4.1 27/05/2026**
 1: Padronização do etl_erros
+
 2: especificação dos registros inseridos ou ja existentes
+
 3: pequena adição nas constantes
+
 4: melhoria no testando_parser para verificar apenas os em quarantine no caso completo; modificado o nome para reavaliando_parser
+
 5: pequenas otimizações no ETL
+
 6: Documentação geral do ETL
 
 
 
 ##  **Versão 4.1.5 04/06/2026**
 1: Documentação do parser e sanitizer
+
 2: Moderadas melhorias na lógica no parser e sanitizer
 
 ##  **Versão 4.2   06/06/2026**
 Percebi que minhas documentações estão horriveis e fora do padrão, iniciei o estudo de como fazer elas corretamente para aplicar no código, e baixei o docformatter para ajudar
 
 1: Documentação do parser e sanitizer melhorada
+
 2: Remoção de comentários desnecessarios
+
+##  **Versão 4.2.5   06/06/2026**
+Finalizado a correção das documentações.
+
+1: Documentação nos códigos responsáveis pela ETL.
