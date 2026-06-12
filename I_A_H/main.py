@@ -1,3 +1,19 @@
+"""
+Script principal para a análise de itens.
+=========================================
+
+Este script é responsável por capturar a tela, detectar itens, extrair texto, parsear os dados, salvar no MongoDB
+e exportar para JSON.
+
+Routine List
+------------
+beep_async
+    Função para tocar um beep de forma assíncrona, utilizada para avisos sonoros durante a execução do script.
+main
+    Função principal para a execução do script, responsável por capturar a tela, detectar itens, extrair texto,
+    parsear os dados, salvar no MongoDB e exportar para JSON. 
+"""
+
 import cv2
 import keyboard
 import winsound
@@ -9,13 +25,21 @@ from I_A_H.storage.json_export import save_json
 from I_A_H.ui.overlay import draw_overlay
 import threading
 
-
 def beep_async(freq, duration):
+    """Função para tocar avisos sonoros durante a execução do script.
+    
+    Parameters
+    ----------
+    freq: int
+        A frequência do beep em hertz.
+    duration: int
+        A duração do beep em milissegundos.
+    """
     threading.Thread(target=winsound.Beep, args=(freq, duration), daemon=True).run()
 
-
-
 def main():
+    """Função principal para a execução do script
+    """
     analyzer = ScreenAnalyzer(r"I_A_H\IA\best.pt")
     mongo = MongoStorage()
     running = True

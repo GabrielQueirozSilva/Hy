@@ -1,4 +1,10 @@
-#Aqui fica as listas de possibilidades e constantes usadas no bot
+"""
+Modulo de constantes para o projeto.
+====================================
+
+Este módulo define constantes utilizadas em todo o projeto, como limites de confiança, títulos de equipamentos,
+palavras-chave para identificação de itens e correções de texto.
+"""
 LIMITE_DE_CONFIANCA_GERAL = 87
 LIMITE_DE_CONFIANCA_PET = 88 
 
@@ -61,8 +67,10 @@ SELLER_REPLACEMENTS = {
     "seller ": "seller:", "sellen:": "seller:", "jeller:": "seller:", "sellern:": "seller:",
     "eller-": "seller:",
     
-    "[mvp ]": "[MPV]", 
-    "[vip+ ": "[VIP+]",
+    "[mvp ]": "[mvp]", '[mvp ': '[mvp] ', "[mvp+ ": '[mvp+]', "[mvp++ ": '[mvp++]', '[mvp 1': '[mvp]',
+    '[mpv]': '[mvp]', '[mvp j ': '[mvp]',
+    "[vip+ ": "[vip+]",
+    'toutube]': '[youtube]', 'toutube ': '[youtube]'
 }
 
 # 2. Correções Específicas de PREÇO (Contexto 'PRICE')

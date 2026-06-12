@@ -289,3 +289,17 @@ Percebi que minhas documentações estão horriveis e fora do padrão, iniciei o
 Finalizado a correção das documentações.
 
 1: Documentação nos códigos responsáveis pela ETL.
+
+
+## **Versão 4.9.1 11/06/2026**
+Começei uma grande mudança envolvendo o seller, planejo fazer uma tabela separada para armazenar os sellers de maneira melhor,
+para isso preciso melhorar a sanitização do seller, o qual eu precisei mudar o constants.py e alterar os dados presentes no
+pgadmin (o que eu não achei que faria), para alterar os dados lá eu somente fiz um código de nome pgchange.py para aplicar a nova
+versão do constants lá e como eu tinha um backup total no mongodb, simplesmente apagaria as informções de lá e subiria novamente
+pelo mongo, algo aplicavel apenas pois tenho apenas 900 linhas de dado.
+
+1: Doumentação dos storages e do main.
+
+2: Mundaça no constants, na parte responsável pelo seller.
+
+3: Criação do pgchange e seller
