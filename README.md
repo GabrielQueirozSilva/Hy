@@ -153,7 +153,7 @@ O "Auction Seeker" é composto por 4 páginas:
 | **Histórico** | evolução de preços, detecção de undercutting |
 
 Prints e uma descrição de cada página estão em [`docs/RESULTS.md`](docs/RESULTS.md).
-O arquivo completo do Power BI está disponível para download: [auction_seeker.pbix](auction_seeker.pbix)
+O arquivo completo do Power BI está disponível para download: [auction_seeker.pbix](docs/auction_seeker.pbix)
 
 ## Licença
 
