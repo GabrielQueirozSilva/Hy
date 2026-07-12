@@ -44,8 +44,6 @@ Navegação completa pelas quatro páginas do dashboard, incluindo interatividad
 
 ### Detecção em tempo real
 
-_Print ou GIF do YOLO detectando a caixa de informações de um item durante o jogo._
-
 ![Detecção YOLO em tempo real](images/deteccao_yolo.gif)
 
 ### Métricas do modelo

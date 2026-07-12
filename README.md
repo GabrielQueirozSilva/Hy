@@ -2,8 +2,8 @@
 
 Pipeline completo de dados para o mercado de leilões (Auction House) do Hypixel Skyblock: captura de tela com visão computacional, extração de texto via OCR, ETL em Python, armazenamento em MongoDB/PostgreSQL e um dashboard analítico em Power BI ("Auction Seeker").
 
-> 📊 Prints e vídeos do dashboard final: [`docs/RESULTS.md`](docs/RESULTS.md)
-> 🗓️ Histórico de versões e decisões técnicas: [`CHANGELOG.md`](CHANGELOG.md)
+> Prints e vídeos do dashboard final: [`docs/RESULTS.md`](docs/RESULTS.md)
+> Histórico de versões e decisões técnicas: [`CHANGELOG.md`](CHANGELOG.md)
 
 ---
 
@@ -125,6 +125,14 @@ O status de cada documento no MongoDB pode ser:
 - `validated` — pronto e carregado no PostgreSQL
 - `quarantine` — inválido, mas recuperável (pode ser reprocessado sem perder histórico)
 - `rejected` — inválido e sem dados suficientes para correção
+
+## Scripts auxiliares
+
+Além do pipeline principal, o projeto conta com scripts pontuais de manutenção e correção retroativa de dados, localizados em `I_A_H/tools/`:
+
+- **`read_json.py`** — reimporta arquivos JSON de detecções antigas para o MongoDB.
+- **`pgchange.py`** — reaplica correções de sanitização de vendedores diretamente nos registros já existentes no PostgreSQL.
+- **`reavaliando_parser.py`** — reprocessa documentos em quarentena com a versão atual do parser, para avaliar se as correções recentes resolveram os erros anteriores.
 
 ## Dashboard (Power BI)
 

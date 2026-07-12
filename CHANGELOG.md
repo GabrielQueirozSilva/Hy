@@ -6,7 +6,31 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
 
 ---
 
-## [Não lançado] — decisão em aberto
+## [5.0] — 2026-07-11
+
+### Added
+- Documentação final para a publicação, com os seguintes arquivos/pastas:
+  - `LICENSE`: licença MIT
+  - `README.md`: README novo, reescrito para a publicação
+  - `docs/RESULTS.md`: resultados visuais do dashboard e métricas do modelo
+  - `CHANGELOG.md`: log de versões, antigo README reorganizado
+  - `docs/images/`: local de armazenamento das imagens do projeto
+  - `I_A_H/tools/`: local de armazenamento dos scripts auxiliares criados durante o desenvolvimento do projeto
+
+### Changed
+- `constants.py`: adição de novas correções.
+- `seller.py`: correção do erro que gerava vendedores órfãos; documentação do arquivo.
+- `main.py`: adição de indicação de confiança na detecção.
+- `.env.example`: correção no nome do arquivo (antes `.env.exemple`).
+- `requirements.txt`: correção no nome do arquivo (antes `requeriments.txt`).
+- `extract.py`: pequena atualização na documentação.
+- `load.py`: alteração referente à correção de vendedores órfãos.
+- `run_etl.py`: alteração referente à correção de vendedores órfãos.
+- `.gitignore`: atualização para excluir pastas de dados locais e arquivos auxiliares que não deveriam ser versionados.
+
+---
+
+## [Não lançado] — Dúvida
 
 Início de uma reestruturação da modelagem de vendedores (seller). Duas abordagens estão sendo avaliadas:
 
