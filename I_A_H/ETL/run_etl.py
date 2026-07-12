@@ -9,12 +9,14 @@ Routine List
 run
     Função principal utilizada para iniciar o ETL.
 """
+from I_A_H.ETL.seller import agrupation
 from I_A_H.ETL.extract import Extrator
 from I_A_H.ETL.transform import transformar_documento
 from I_A_H.ETL.schemas import create_database_if_not_exists, create_tables, validar_item
 from I_A_H.ETL.load import load_data
 from pymongo import MongoClient
 import os
+import psycopg2
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -30,7 +32,16 @@ def run():
     db = client[os.getenv("MONGO_DB")]
     collection = db[os.getenv("MONGO_COLLECTION_NAME")]
 
-    #Extrai os dados do mongodb.
+    #Se conecta ao pg
+    conn = psycopg2.connect(
+        host=os.getenv("POSTGRES_HOST"),
+        database=os.getenv("POSTGRES_DB"),
+        user=os.getenv("POSTGRES_USER"),
+        password=os.getenv("POSTGRES_PASSWORD")
+    )
+    cur = conn.cursor()
+
+    #Extrai os dados do mongodb como uma LISTA de DICIONARIOS.
     extrator = Extrator()
     documentos_mongo = extrator.extrair_dados()
     print(f"{len(documentos_mongo)} documentos extraidos do MongoDB")
@@ -51,7 +62,10 @@ def run():
     print(f"Quarentena/Rejeitados: {len(documentos_mongo) - len(validados)}")
 
     if validados:
-        load_data(validados)
+        agrupation(validados, cur)
+        conn.commit()
+        load_data(validados, cur)
+        conn.commit()
 
     client.close()
     print("ETL finalizado")

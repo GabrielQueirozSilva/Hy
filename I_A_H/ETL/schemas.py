@@ -117,6 +117,13 @@ def create_tables():
 
     cur = conn.cursor()
     cur.execute("""
+    CREATE TABLE IF NOT EXISTS sellers (
+        id SERIAL PRIMARY KEY,
+        name TEXT UNIQUE,
+        rank TEXT);
+    """)
+
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS auction_items (
         id SERIAL PRIMARY KEY,
         source_mongo_id TEXT UNIQUE,
@@ -125,10 +132,10 @@ def create_tables():
         class TEXT,
         tier TEXT,
         price BIGINT,
-        seller TEXT,
+        seller_id INTEGER REFERENCES sellers(id),
         created_at TIMESTAMP DEFAULT NOW()
     );
-    """)
+    """)   
     conn.commit()
     cur.close()
     conn.close()

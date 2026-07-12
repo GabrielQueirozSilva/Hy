@@ -5,6 +5,10 @@ Modulo de constantes para o projeto.
 Este módulo define constantes utilizadas em todo o projeto, como limites de confiança, títulos de equipamentos,
 palavras-chave para identificação de itens e correções de texto.
 """
+
+SIMILARITY_THRESHOLD = 0.75
+
+
 LIMITE_DE_CONFIANCA_GERAL = 87
 LIMITE_DE_CONFIANCA_PET = 88 
 
@@ -65,12 +69,13 @@ NAMES_REPLACEMENTS = {
 SELLER_REPLACEMENTS = {
     "sellen-": "seller:", "seller-": "seller:", "seller=": "seller:", "sellen": "seller:", 
     "seller ": "seller:", "sellen:": "seller:", "jeller:": "seller:", "sellern:": "seller:",
-    "eller-": "seller:",
+    "eller-": "seller:", "sellern-": "seller:",
     
     "[mvp ]": "[mvp]", '[mvp ': '[mvp] ', "[mvp+ ": '[mvp+]', "[mvp++ ": '[mvp++]', '[mvp 1': '[mvp]',
-    '[mpv]': '[mvp]', '[mvp j ': '[mvp]',
-    "[vip+ ": "[vip+]",
-    'toutube]': '[youtube]', 'toutube ': '[youtube]'
+    '[mpv]': '[mvp]', '[mvp j ': '[mvp]', '[dmvp': '[mvp]', 'dmv ': '[mvp]',
+    "[vip+ ": "[vip+]", '[vip ': '[vip]',
+    'toutube]': '[youtube]', 'toutube ': '[youtube]',
+    'j ': '', '1 ': '', 
 }
 
 # 2. Correções Específicas de PREÇO (Contexto 'PRICE')

@@ -62,7 +62,7 @@ class Extrator:
             
         Notes
         -----
-        A estrutura de cada documento é:
+        A estrutura de cada documento é uma LISTA de DICIONARIOS com a seguinte estrutura:
         '__id': Objecid('id')
         'scan_timestamp': 'anomesdia_time'
         'raw_text': string

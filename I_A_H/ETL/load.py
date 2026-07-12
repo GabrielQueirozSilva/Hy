@@ -17,29 +17,22 @@ import psycopg2
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+from I_A_H.ETL.seller import similaridade, SIMILARITY_THRESHOLD, extrair_vendor_rank
 load_dotenv()
 
-def load_data(registros):
-    """Função principal para carregar os dados transformados para o banco de dados postgres.
-    
-    Parameters
-    ----------
-    registros: list
-        Uma lista de dicionários contendo os dados transformados, prontos para serem carregados no banco de dados postgres.
-    """
-    try:
-        conn = psycopg2.connect(
-            host=os.getenv("POSTGRES_HOST"),
-            database=os.getenv("POSTGRES_DB"),
-            user=os.getenv("POSTGRES_USER"),
-            password=os.getenv("POSTGRES_PASSWORD")
-        )
-    except Exception as e:
-        print(f"Erro ao conectar ao banco de dados: {e}")
-        print(repr(e))
-        return
-    cur = conn.cursor()
+def resolver_seller_id(seller_raw, cur):
+    vendor, _ = extrair_vendor_rank(seller_raw)
+    if not vendor or vendor == "indisponivel":
+        return None
+    cur.execute("SELECT id, name FROM sellers")
+    existentes = cur.fetchall()
+    for seller_id, name in existentes:
+        if similaridade(vendor, name) >= SIMILARITY_THRESHOLD:
+            return seller_id
+    return None
 
+
+def load_data(registros, cur):
     insert_query = """
     INSERT INTO auction_items (
         source_mongo_id,
@@ -48,7 +41,7 @@ def load_data(registros):
         class,
         tier,
         price,
-        seller,
+        seller_id,
         created_at
     )
     VALUES (
@@ -58,15 +51,13 @@ def load_data(registros):
         %(class)s,
         %(tier)s,
         %(price)s,
-        %(seller)s,
+        %(seller_id)s,
         %(created_at)s
     )
     ON CONFLICT (source_mongo_id) DO NOTHING;
     """
-    #ON CONFLICT evita a inscrição de dados duplicados.
     inserted = 0
     skipped = 0
-    #inserted e skipped são variáveis para contar quantos registros foram inseridos e quantos já existiam (ignorados).
     for item in registros:
         cur.execute(insert_query, {
             "source_mongo_id": item["id"],
@@ -75,14 +66,11 @@ def load_data(registros):
             "class": item["parsed"].get("class"),
             "tier": item["parsed"].get("tier"),
             "price": item["parsed"].get("price"),
-            "seller": item["parsed"].get("seller"),
+            "seller_id": resolver_seller_id(item["parsed"].get("seller", ""), cur),
             "created_at": datetime.utcnow()
         })
         if cur.rowcount == 1:
             inserted += 1
         else:
             skipped += 1
-    conn.commit()
-    cur.close()
-    conn.close()
     print(f"{inserted} registros inseridos | {skipped} já existiam (ignorados)")
