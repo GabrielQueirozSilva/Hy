@@ -40,6 +40,21 @@ Navegação completa pelas quatro páginas do dashboard, incluindo interatividad
 
 ---
 
+## Análise estatística — Divan gear
+
+Análise de distribuição de preços dos itens do set Divan (helmet, chestplate, leggings, boots), usada para embasar as métricas de lucratividade e variação de preço mostradas no dashboard.
+
+O script [`analise_estatistica.py`](../I_A_H/tools/analise_estatistica.py) roda testes de normalidade (Shapiro-Wilk, Q-Q plot), estatísticas descritivas (mediana, desvio padrão, IQR, MAD) e comparações par a par entre os itens (Mann-Whitney para nível de preço, Levene para volatilidade).
+
+Os resultados consolidados dessas rodadas estão em [`analise_estatistica.xlsx`](analise_estatistica.xlsx), com uma aba por tipo de teste:
+
+- **Estatística Descritiva**: mediana, desvio, IQR e MAD por item
+- **Testes de Normalidade**: resultados do Shapiro-Wilk e Q-Q plots
+- **Mann-Whitney e Levene**: comparação par a par entre os quatro itens do set
+
+---
+
+
 ## Captura e visão computacional (I_A_H)
 
 ### Detecção em tempo real

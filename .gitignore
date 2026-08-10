@@ -11,3 +11,4 @@ venv/
 relatorio_itens.xlsx
 .env
 acao.py
+.vscode

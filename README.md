@@ -43,7 +43,7 @@ O projeto segue uma lógica próxima da arquitetura medalhão: dados brutos e im
 - **Linguagem:** Python 3.11
 - **Bancos de dados:** MongoDB e .json (armazenamento bruto), PostgreSQL (dados tratados)
 - **BI:** Power BI Desktop (modelagem de dados + DAX)
-- **Outras libs:** psycopg2, pymongo, thefuzz (fuzzy matching), python-dotenv
+- **Outras libs:** psycopg2, pymongo, thefuzz (fuzzy matching), python-dotenv, pandas, matplotlib, scipy, seaborn, sqlalchemy
 
 ## Estrutura do projeto
 
@@ -59,6 +59,7 @@ I_A_H/
 │   └── run_etl.py         # orquestrador do pipeline
 ├── parser/          # sanitizer.py e item_parser.py — estruturação do texto bruto
 ├── storage/         # mongo.py, json_export.py
+├── tools/             # analise_estatistica.py, pgcahnge.py, read_json.py, reavaliando_parser.py
 ├── ui/               # overlay.py — feedback visual durante a captura
 ├── constants.py    # constantes utilizadas para correção
 └── main.py            # loop principal de captura
@@ -135,8 +136,9 @@ O status de cada documento no MongoDB pode ser:
 
 ## Scripts auxiliares
 
-Além do pipeline principal, o projeto conta com scripts pontuais de manutenção e correção retroativa de dados, localizados em `I_A_H/tools/`:
+Além do pipeline principal, o projeto conta com scripts pontuais de manutenção, correção retroativa de dados e de utilização geral, localizados em `I_A_H/tools/`:
 
+- **`analise_estatistica`** — Faz a análise estatística dos dados. 
 - **`read_json.py`** — reimporta arquivos JSON de detecções antigas para o MongoDB.
 - **`pgchange.py`** — reaplica correções de sanitização de vendedores diretamente nos registros já existentes no PostgreSQL.
 - **`reavaliando_parser.py`** — reprocessa documentos em quarentena com a versão atual do parser, para avaliar se as correções recentes resolveram os erros anteriores.
