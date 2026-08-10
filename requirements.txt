@@ -9,3 +9,11 @@ opencv-python
 Pillow
 easyocr
 ultralytics
+
+
+#parte responsavel pela analise estatistica
+pandas
+seaborn
+matplotlib
+scipy
+sqlalchemy
