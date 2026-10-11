@@ -42,10 +42,14 @@ class Extrator:
         """
         uri = uri or os.getenv("MONGO_URI")
         db_name = db_name or os.getenv("MONGO_DB")
+        if not uri:
+            raise ValueError("MONGO_URI não definido")
+        if not db_name:
+            raise ValueError("MONGO_DB não definido")
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
 
-    def extrair_dados(self, collection_name=None):
+    def extrair_dados(self, collection_name=None, filtro=None):
         """Função principal para extrair os dados do mongodb.
         
         Parameters
@@ -74,6 +78,16 @@ class Extrator:
         'etl_status': string (validated, quarantine, rejected)        
         """
         collection_name = collection_name or os.getenv("MONGO_COLLECTION_NAME")
-        collection = self.db[collection_name]
-        return list(collection.find({}))
+        if not collection_name:
+            raise ValueError("MONGO_COLLECTION_NAME não definido")
+        return list(self.db[collection_name].find(filtro or {}))
     
+    
+    def close(self):
+        self.client.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()

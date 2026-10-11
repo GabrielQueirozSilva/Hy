@@ -91,7 +91,7 @@ docs/
 2. Instale as dependências:
 
    ```bash
-   pip install -r requirements.txt
+   python -m pip install -r requirements.txt
    ```
 
 3. Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:

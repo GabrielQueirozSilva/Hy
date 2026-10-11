@@ -37,16 +37,13 @@ de um vendedor (ex: `load.py`), para evitar divergência entre o texto persistid
 comparação de similaridade.
 """
 from collections import Counter
-import psycopg2
-from dotenv import load_dotenv
-import os
-import pandas as pd
 from difflib import SequenceMatcher
 import re
-from ..constants import *
 
-load_dotenv()
+from ..constants import SIMILARITY_THRESHOLD
 
+SEM_RANK = "sem rank"
+INDISPONIVEL = "indisponivel"
 
 def normalizar(nome):
     """Remove caracteres não alfanuméricos e converte o texto para minúsculas.
@@ -92,6 +89,61 @@ def similaridade(a, b):
     """
     return SequenceMatcher(None, normalizar(a), normalizar(b)).ratio()
 
+def extrair_vendor_rank(raw):
+    """Separa o rank e o nome do vendedor a partir do texto bruto do campo seller.
+
+    Parameters
+    ----------
+    raw: str or None
+        O texto bruto do campo seller, tipicamente no formato "[RANK] nome_do_vendedor". Pode ser None
+        caso o item não possua um vendedor identificado.
+
+    Returns
+    -------
+    tuple: str, str
+        Uma tupla contendo o nome do vendedor (sem o prefixo de rank) e o rank extraído. Caso `raw` seja
+        None ou vazio, o vendedor retornado é "indisponivel". Caso não seja encontrado um rank entre
+        colchetes no início do texto, o rank retornado é "sem rank" e o texto original é mantido como
+        vendedor.
+
+    Notes
+    -----
+    Esta função deve ser utilizada de forma consistente em todo o sistema sempre que for necessário
+    separar rank e nome a partir do texto bruto do seller — tanto na etapa de agrupamento (`agrupation`)
+    quanto na resolução do `seller_id` durante a carga (`load.py`). Usar lógicas de extração divergentes
+    nesses dois pontos causa incompatibilidade entre o texto persistido em `sellers` e o texto usado na
+    busca por correspondência, resultando em vendedores órfãos ou duplicados.
+    """
+    vendor = str(raw).strip() if raw else ""
+    if not vendor:
+        return INDISPONIVEL, SEM_RANK
+    rank = SEM_RANK
+    if vendor.startswith("[") and "]" in vendor:
+        rank = vendor[1:vendor.index("]")].strip() or SEM_RANK
+        vendor = vendor[vendor.index("]") + 1:].strip()
+    return vendor, rank
+
+def vendor_valido(vendor):
+    """Indica se o nome extraído é um vendedor real (não "indisponivel" e não vazio após normalizar)."""
+    return vendor != INDISPONIVEL and bool(normalizar(vendor))
+
+def encontrar_seller(vendor, sellers):
+    """Retorna o id do vendedor mais similar acima do limiar, compartilhada com o load.py
+
+    `sellers` é uma lista de tuplas (id, name). Usada tanto por persistir_sellers
+    quanto pelo load.py, para garantir o mesmo critério nos dois pontos.
+    """
+    melhor_id, melhor_score = None, -1.0
+    for seller_id, name in sellers:
+        score = similaridade(vendor, name)
+        if score >= SIMILARITY_THRESHOLD and score > melhor_score:
+            melhor_id, melhor_score = seller_id, score
+    return melhor_id
+
+def _rank_mais_comum(ranks):
+    reais = [r for r in ranks if r != SEM_RANK]
+    return Counter(reais or ranks).most_common(1)[0][0]
+
 
 def deduplicar_vendedores(resultado, threshold=0.85):
     """Agrupa vendedores duplicados (mesmo vendedor, nome levemente divergente) em um único registro.
@@ -125,22 +177,18 @@ def deduplicar_vendedores(resultado, threshold=0.85):
         for j, duplicado in enumerate(registros):
             if i == j or j in removidos:
                 continue
-            sim = similaridade(principal["vendedor"], duplicado["vendedor"])
-            if sim >= threshold:
-                if i != registros.index(principal):
-                    registros[i] = principal
-                principal["ranks_list"] = principal.get("ranks_list", [principal["rank"]]) + \
-                                          duplicado.get("ranks_list", [duplicado["rank"]])
-                principal["rank"] = Counter(principal["ranks_list"]).most_common(1)[0][0]
+            if similaridade(principal["vendedor"], duplicado["vendedor"]) >= threshold:
+                principal["ranks_list"] = (
+                    principal.get("ranks_list", [principal["rank"]])
+                    + duplicado.get("ranks_list", [duplicado["rank"]])
+                )
+                principal["rank"] = _rank_mais_comum(principal["ranks_list"])
                 removidos.add(j)
-                # print(f'Mesclado: "{duplicado["vendedor"]}" → "{principal["vendedor"]}"')
 
     resultado = [r for i, r in enumerate(registros) if i not in removidos]
     for r in resultado:
         r.pop("ranks_list", None)
-
     return resultado
-
 
 def persistir_sellers(vendedores, cur):
     """Insere vendedores novos ou atualiza o rank de vendedores já existentes na tabela `sellers`.
@@ -167,17 +215,12 @@ def persistir_sellers(vendedores, cur):
     existentes = cur.fetchall()
 
     for v in vendedores:
-        match_id = None
-        for seller_id, seller_name in existentes:
-            if similaridade(v["vendedor"], seller_name) >= SIMILARITY_THRESHOLD:
-                match_id = seller_id
-                break
-
-        if match_id:
-            cur.execute("UPDATE sellers SET rank = %s WHERE id = %s", (v["rank"], match_id))
+        match_id = encontrar_seller(v["vendedor"], existentes)
+        if match_id is not None:
+            if v["rank"] != SEM_RANK:  # não sobrescreve rank real com "sem rank"
+                cur.execute("UPDATE sellers SET rank = %s WHERE id = %s", (v["rank"], match_id))
         else:
             cur.execute("INSERT INTO sellers (name, rank) VALUES (%s, %s)", (v["vendedor"], v["rank"]))
-
 
 def agrupation(doc, cur):
     """Orquestra a extração, deduplicação e persistência dos vendedores a partir de um lote de itens.
@@ -204,41 +247,10 @@ def agrupation(doc, cur):
     resultado = []
     for item in doc:
         vendor, rank = extrair_vendor_rank(item["parsed"].get("seller"))
+        if not vendor_valido(vendor):
+            continue
         resultado.append({"vendedor": vendor, "rank": rank, "ranks_list": [rank]})
 
     vendedores = deduplicar_vendedores(resultado, SIMILARITY_THRESHOLD)
     persistir_sellers(vendedores, cur)
     return vendedores
-
-
-def extrair_vendor_rank(raw):
-    """Separa o rank e o nome do vendedor a partir do texto bruto do campo seller.
-
-    Parameters
-    ----------
-    raw: str or None
-        O texto bruto do campo seller, tipicamente no formato "[RANK] nome_do_vendedor". Pode ser None
-        caso o item não possua um vendedor identificado.
-
-    Returns
-    -------
-    tuple: str, str
-        Uma tupla contendo o nome do vendedor (sem o prefixo de rank) e o rank extraído. Caso `raw` seja
-        None ou vazio, o vendedor retornado é "indisponivel". Caso não seja encontrado um rank entre
-        colchetes no início do texto, o rank retornado é "sem rank" e o texto original é mantido como
-        vendedor.
-
-    Notes
-    -----
-    Esta função deve ser utilizada de forma consistente em todo o sistema sempre que for necessário
-    separar rank e nome a partir do texto bruto do seller — tanto na etapa de agrupamento (`agrupation`)
-    quanto na resolução do `seller_id` durante a carga (`load.py`). Usar lógicas de extração divergentes
-    nesses dois pontos causa incompatibilidade entre o texto persistido em `sellers` e o texto usado na
-    busca por correspondência, resultando em vendedores órfãos ou duplicados.
-    """
-    vendor = raw or "indisponivel"
-    rank = "sem rank"
-    if vendor.startswith("[") and "]" in vendor:
-        rank = vendor[1:vendor.index("]")]
-        vendor = vendor[vendor.index("]")+1:].strip()
-    return vendor, rank

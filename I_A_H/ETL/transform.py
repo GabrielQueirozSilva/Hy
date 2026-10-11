@@ -21,47 +21,37 @@ manualmente no mongodb.
 sendo assim, aguardando para serem apagados do mongodb.
 """
 
-def transformar_documento(doc, valid, reason, collection):
-    """Função principal para transformação dos dados.
+from pymongo import UpdateOne
 
-    Parameters
-    ----------
-    doc: dict
-        O documento do mongodb a ser transformado.
-    valid: bool
-        O estado de validade do documento (True caso seja válido, False caso contrário).
-    reason: str
-        A razão da invalidade do documento, pode ser None caso seja válido.
-    collection: pymongo.collection.Collection
-        A collection do mongodb para a modificação do documento.
+# Motivos de invalidez sem informação suficiente para correção manual.
+MOTIVOS_REJEITADOS = {"PARSED_INVALID"}
 
-    Returns
-    -------
-    dict
-        Um dicionário contendo as informações principais do documento transformado, pronto para o armazenamento no
-        postgres.
+def classificar_status(valid, reason):
+    """Retorna 'validated', 'quarantine' ou 'rejected'."""
+    if valid:
+        return "validated"
+    if reason in MOTIVOS_REJEITADOS:
+        return "rejected"
+    return "quarantine"
 
-    Notes
-    -----
-    Esta função transforma os dados do mongodb diretamente.
-    """
-    item_data = doc.get("parsed", {})    
-    if valid is True:
-        etl_status = "validated"
-    elif valid is False and reason != "PARSED_MISSING":
-        etl_status = "quarantine"
-    else:
-        etl_status = "rejected"
-    collection.update_one(
-        {"_id": doc["_id"]},
-        {"$set": {
-            "etl_status": etl_status,
-            "etl_errors": reason
-        }}
-    )
-    #A função retorna sempre o dado resumido (sem o raw e o sanitized), com as modificações feitas
+
+def transformar_documento(doc):
+    """Retorna o documento resumido (sem raw/sanitized), pronto para a carga."""
     return {
-        "id": str(doc.get("_id")),
+        "id": str(doc["_id"]),
         "scan_timestamp": doc.get("scan_timestamp"),
-        "parsed": item_data
+        "parsed": doc.get("parsed") or {},
     }
+    
+def marcar_status(collection, marcacoes):
+    """Grava etl_status e etl_errors no Mongo em uma única operação em lote.
+
+    marcacoes: lista de tuplas (_id, status, reason).
+    """
+    if not marcacoes:
+        return
+    ops = [
+        UpdateOne({"_id": _id}, {"$set": {"etl_status": status, "etl_errors": reason}})
+        for _id, status, reason in marcacoes
+    ]
+    collection.bulk_write(ops, ordered=False)
